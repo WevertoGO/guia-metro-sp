@@ -12,15 +12,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Metrô SP" />
-  <link
-    rel="icon"
-    type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230455A1'/%3E%3Cstop offset='50%25' stop-color='%23007E5E'/%3E%3Cstop offset='100%25' stop-color='%239B3894'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Crect x='136' y='96' width='240' height='264' rx='52' fill='none' stroke='%23FFFFFF' stroke-width='28'/%3E%3Cpath d='M136 224h240M184 360l-36 56M328 360l36 56' fill='none' stroke='%23FFFFFF' stroke-width='28' stroke-linecap='round'/%3E%3Ccircle cx='196' cy='296' r='16' fill='%23FFFFFF'/%3E%3Ccircle cx='316' cy='296' r='16' fill='%23FFFFFF'/%3E%3C/svg%3E"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230455A1'/%3E%3Cstop offset='50%25' stop-color='%23007E5E'/%3E%3Cstop offset='100%25' stop-color='%239B3894'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Crect x='136' y='96' width='240' height='264' rx='52' fill='none' stroke='%23FFFFFF' stroke-width='28'/%3E%3Cpath d='M136 224h240M184 360l-36 56M328 360l36 56' fill='none' stroke='%23FFFFFF' stroke-width='28' stroke-linecap='round'/%3E%3Ccircle cx='196' cy='296' r='16' fill='%23FFFFFF'/%3E%3Ccircle cx='316' cy='296' r='16' fill='%23FFFFFF'/%3E%3C/svg%3E"
-  />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -52,13 +47,19 @@
     };
   </script>
   <style>
+    html, button, a {
+      touch-action: manipulation;
+    }
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background-color: #F8FAFC;
       color: #0F172A;
       -webkit-tap-highlight-color: transparent;
     }
-    /* Custom scrollbar for horizontal quick chips */
+    .overscroll-contain {
+      overscroll-behavior-y: contain;
+    }
+    /* Custom scrollbar helper */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -91,10 +92,12 @@
         </div>
         <div class="min-w-0">
           <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-slate-900 truncate">
-            Guia Metrô &amp; Mobilidade SP
+            <span class="hidden sm:inline">Guia Metrô &amp; Mobilidade SP</span>
+            <span class="sm:hidden">Guia Metrô SP</span>
           </h1>
           <p class="text-xs text-slate-500 font-medium truncate">
-            Base Vila Mariana • Planejador Inteligente
+            <span class="hidden sm:inline">Base Vila Mariana • Planejador Inteligente</span>
+            <span class="sm:hidden">Base Vila Mariana</span>
           </p>
         </div>
       </div>
@@ -125,11 +128,46 @@
   </header>
 
   <!-- Main Content Grid -->
-  <main class="max-w-5xl mx-auto px-4 py-4 sm:py-6 pb-20">
+  <main class="max-w-5xl mx-auto px-4 py-4 sm:py-6" style="padding-bottom: max(5rem, calc(4.5rem + env(safe-area-inset-bottom)));">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-      <!-- LEFT COLUMN: Origin, Destination Search, Context Controls -->
+      <!-- LEFT COLUMN: PWA Install Banner, Origin, Destination Search, Context Controls -->
       <div class="lg:col-span-5 space-y-4">
+
+        <!-- PWA Install Prompt Banner (Android native prompt or iOS Safari guide) -->
+        <section id="pwaInstallBanner" class="hidden bg-gradient-to-r from-[#0455A1] to-[#007E5E] text-white rounded-2xl shadow-sm p-3.5" aria-label="Instalar aplicativo">
+          <div class="flex items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="./icons/icon-192.png" alt="Ícone Metrô SP" class="w-10 h-10 rounded-xl bg-white/10 shrink-0 shadow-sm" />
+              <div class="min-w-0">
+                <p class="text-xs font-extrabold leading-snug truncate">Instalar App no Celular</p>
+                <p id="pwaInstallSubtitle" class="text-[11px] text-blue-100 leading-snug">Funciona como app nativo e offline no metrô</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                id="pwaInstallActionBtn"
+                class="px-3 py-2 rounded-xl text-xs font-extrabold bg-white text-[#0455A1] hover:bg-blue-50 transition shadow-sm"
+              >
+                Instalar
+              </button>
+              <button
+                type="button"
+                id="dismissPwaBannerBtn"
+                aria-label="Dispensar instalação"
+                class="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <p id="iosInstallGuideText" class="hidden mt-2.5 pt-2.5 border-t border-white/20 text-[11px] text-blue-50 leading-relaxed">
+            No iPhone/iPad (Safari): toque em <strong>Compartilhar</strong> (ícone de quadrado com seta para cima) e escolha <strong>"Adicionar à Tela de Início"</strong>.
+          </p>
+        </section>
 
         <!-- 1. ORIGEM FIXA CARD -->
         <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4" aria-label="Ponto de Origem">
@@ -170,7 +208,7 @@
               type="text"
               id="originInput"
               value="Condomínio DNA Vila Mariana (R. Dr. Neto de Araújo, 265 - Vila Mariana, SP)"
-              class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+              class="w-full px-3 py-2.5 text-base sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
               placeholder="Digite endereço ou ponto de referência..."
             />
             <div class="flex items-center justify-between gap-2">
@@ -328,8 +366,9 @@
                     type="text"
                     id="destinationInput"
                     autocomplete="off"
+                    enterkeyhint="search"
                     placeholder="Ex: Av. Paulista, Aquário, Restaurante, Museu..."
-                    class="w-full pl-9 pr-8 py-3 text-sm font-medium rounded-xl border border-slate-300 bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1] transition"
+                    class="w-full pl-9 pr-8 py-3 text-base sm:text-sm font-medium rounded-xl border border-slate-300 bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1] transition"
                   />
                   <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                     <circle cx="11" cy="11" r="7" />
@@ -844,6 +883,21 @@
 
       </div>
     </div>
+
+    <!-- Subtle PWA Install & Offline Status Footer -->
+    <div id="footerPwaSection" class="mt-6 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 px-1">
+      <span id="pwaStatusLabel">App Web • 20 destinos prontos</span>
+      <button
+        type="button"
+        id="footerInstallPwaBtn"
+        class="inline-flex items-center gap-1.5 font-semibold text-[#0455A1] hover:underline"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+        </svg>
+        <span>Instalar no celular (PWA)</span>
+      </button>
+    </div>
   </main>
 
   <!-- Modal: Configurar Chave Gemini API -->
@@ -901,7 +955,7 @@
               autocomplete="off"
               spellcheck="false"
               placeholder="Cole sua chave AIza..."
-              class="w-full pl-3.5 pr-10 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+              class="w-full pl-3.5 pr-10 py-2.5 text-base sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
             />
             <button
               type="button"
@@ -992,8 +1046,9 @@
             type="text"
             id="modalDestFilterInput"
             autocomplete="off"
+            enterkeyhint="search"
             placeholder="Filtrar por nome, bairro ou linha (ex: Parque, Paulista, L1)..."
-            class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+            class="w-full pl-9 pr-3 py-2.5 text-base sm:text-sm rounded-xl border border-slate-300 bg-slate-50/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
           />
           <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
@@ -1002,7 +1057,7 @@
         </div>
       </div>
 
-      <div id="destinationsModalList" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2">
+      <div id="destinationsModalList" class="flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4 space-y-2" style="padding-bottom: max(1rem, env(safe-area-inset-bottom));">
         <!-- Populated dynamically via JS -->
       </div>
     </div>
@@ -1840,6 +1895,13 @@
     // 5. DOM REFERENCES
     // =========================================================================
     const els = {
+      pwaInstallBanner: document.getElementById('pwaInstallBanner'),
+      pwaInstallSubtitle: document.getElementById('pwaInstallSubtitle'),
+      pwaInstallActionBtn: document.getElementById('pwaInstallActionBtn'),
+      dismissPwaBannerBtn: document.getElementById('dismissPwaBannerBtn'),
+      iosInstallGuideText: document.getElementById('iosInstallGuideText'),
+      pwaStatusLabel: document.getElementById('pwaStatusLabel'),
+      footerInstallPwaBtn: document.getElementById('footerInstallPwaBtn'),
       liveClockText: document.getElementById('liveClockText'),
       openAiSettingsBtn: document.getElementById('openAiSettingsBtn'),
       aiKeyHeaderDot: document.getElementById('aiKeyHeaderDot'),
@@ -2216,18 +2278,74 @@
       }
     }
 
+    /**
+     * Dismiss mobile virtual keyboard if an input currently has focus.
+     */
+    function blurActiveInput() {
+      const active = document.activeElement;
+      if (active && typeof active.blur === 'function' && active !== document.body) {
+        active.blur();
+      }
+    }
+
+    /**
+     * Lock background body scroll whenever any modal dialog is open.
+     */
+    function syncModalBodyLock() {
+      const aiOpen = els.aiSettingsModal && !els.aiSettingsModal.classList.contains('hidden');
+      const destOpen = els.destinationsModal && !els.destinationsModal.classList.contains('hidden');
+      document.body.classList.toggle('overflow-hidden', Boolean(aiOpen || destOpen));
+    }
+
+    /**
+     * Scroll the suggested route card into view on smaller mobile viewports.
+     */
+    function scrollToRouteOnMobile() {
+      if (window.innerWidth < 1024 && els.routeResultCard) {
+        requestAnimationFrame(() => {
+          els.routeResultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    }
+
+    /**
+     * Activate one of the 20 local curated routes cleanly and close pickers.
+     */
+    function activateLocalDestination(dest, { shouldRecord = true, shouldScroll = true } = {}) {
+      if (!dest) return;
+      blurActiveInput();
+      state.currentRoute = dest;
+      state.isAiRoute = false;
+      state.isOfflineFallback = false;
+      els.destinationInput.value = dest.name;
+      els.clearSearchBtn.classList.remove('hidden');
+      els.autocompleteDropdown.classList.add('hidden');
+      if (shouldRecord) {
+        recordRecentSearch({ type: 'local', id: dest.id, label: dest.name });
+      }
+      renderAll();
+      if (shouldScroll) {
+        scrollToRouteOnMobile();
+      }
+    }
+
     function openAiModal() {
+      blurActiveInput();
       renderAiKeyStatus();
       els.geminiKeyInput.value = getStoredGeminiApiKey();
       els.geminiKeyInput.type = 'password';
       els.eyeIconOpen.classList.remove('hidden');
       els.eyeIconClosed.classList.add('hidden');
       els.aiSettingsModal.classList.remove('hidden');
-      els.geminiKeyInput.focus();
+      syncModalBodyLock();
+      if (window.innerWidth >= 640) {
+        els.geminiKeyInput.focus();
+      }
     }
 
     function closeAiModal() {
       els.aiSettingsModal.classList.add('hidden');
+      syncModalBodyLock();
     }
 
     /**
@@ -2391,21 +2509,19 @@
           if (item.type === 'local' && item.id) {
             const found = DESTINATIONS_DB.find((d) => d.id === item.id);
             if (found) {
-              state.currentRoute = found;
-              state.isAiRoute = false;
-              state.isOfflineFallback = false;
-              recordRecentSearch({ type: 'local', id: found.id, label: found.name });
-              renderAll();
+              activateLocalDestination(found, { shouldRecord: true, shouldScroll: true });
               return;
             }
           }
 
           if (item.route && item.origin === state.origin) {
+            blurActiveInput();
             state.currentRoute = item.route;
             state.isAiRoute = true;
             state.isOfflineFallback = Boolean(item.route._isOfflineFallback);
             recordRecentSearch(item);
             renderAll();
+            scrollToRouteOnMobile();
             return;
           }
 
@@ -2425,19 +2541,23 @@
 
     function openDestinationsModal() {
       if (!els.destinationsModal) return;
+      blurActiveInput();
       if (els.modalDestFilterInput) {
         els.modalDestFilterInput.value = '';
       }
       renderDestinationsModalList('');
       els.destinationsModal.classList.remove('hidden');
-      if (els.modalDestFilterInput) {
-        setTimeout(() => els.modalDestFilterInput.focus(), 50);
+      if (els.destinationsModalList) {
+        els.destinationsModalList.scrollTop = 0;
       }
+      syncModalBodyLock();
     }
 
     function closeDestinationsModal() {
       if (!els.destinationsModal) return;
+      blurActiveInput();
       els.destinationsModal.classList.add('hidden');
+      syncModalBodyLock();
     }
 
     function renderDestinationsModalList(filterText = '') {
@@ -2502,18 +2622,8 @@
         btn.addEventListener('click', () => {
           const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.destId);
           if (!found) return;
-          state.currentRoute = found;
-          state.isAiRoute = false;
-          state.isOfflineFallback = false;
-          els.destinationInput.value = found.name;
-          els.clearSearchBtn.classList.remove('hidden');
-          els.autocompleteDropdown.classList.add('hidden');
-          recordRecentSearch({ type: 'local', id: found.id, label: found.name });
           closeDestinationsModal();
-          renderAll();
-          if (els.routeResultCard) {
-            els.routeResultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
+          activateLocalDestination(found, { shouldRecord: true, shouldScroll: true });
         });
       });
     }
@@ -3146,23 +3256,17 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       document.querySelectorAll('.ac-local-item').forEach((btn) => {
         btn.addEventListener('click', () => {
           const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.matchId);
-          if (found) {
-            state.currentRoute = found;
-            state.isAiRoute = false;
-            state.isOfflineFallback = false;
-            els.destinationInput.value = found.name;
-            els.autocompleteDropdown.classList.add('hidden');
-            recordRecentSearch({ type: 'local', id: found.id, label: found.name });
-            renderAll();
-          }
+          activateLocalDestination(found, { shouldRecord: true, shouldScroll: true });
         });
       });
 
       const aiBtn = document.getElementById('acAiSearchBtn');
       if (aiBtn) {
         aiBtn.addEventListener('click', () => {
+          blurActiveInput();
           els.autocompleteDropdown.classList.add('hidden');
           planCustomDestinationWithAI(query.trim());
+          scrollToRouteOnMobile();
         });
       }
     }
@@ -3177,21 +3281,19 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
         return;
       }
 
+      blurActiveInput();
       const lower = raw.toLowerCase();
       const exactMatch = DESTINATIONS_DB.find(
         (d) => d.name.toLowerCase() === lower || d.chipLabel.toLowerCase() === lower
       );
 
       if (exactMatch) {
-        state.currentRoute = exactMatch;
-        state.isAiRoute = false;
-        state.isOfflineFallback = false;
-        recordRecentSearch({ type: 'local', id: exactMatch.id, label: exactMatch.name });
-        renderAll();
+        activateLocalDestination(exactMatch, { shouldRecord: true, shouldScroll: true });
         return;
       }
 
       planCustomDestinationWithAI(raw);
+      scrollToRouteOnMobile();
     }
 
     // =========================================================================
@@ -3396,6 +3498,153 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       });
     }
 
+    // =========================================================================
+    // 13. PWA INSTALL & SERVICE WORKER SUPPORT
+    // =========================================================================
+    const PWA_BANNER_DISMISSED_KEY = 'metro_sp_pwa_banner_dismissed';
+
+    /** Detecta se o app está executando instalado em modo standalone. */
+    function isRunningStandalone() {
+      return (
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        window.navigator.standalone === true
+      );
+    }
+
+    /** Detecta navegador mobile iOS (iPhone/iPad/iPod) para instruções manuais. */
+    function isIosMobileDevice() {
+      return /iphone|ipad|ipod/i.test(window.navigator.userAgent || '');
+    }
+
+    /** Inicializa banner de instalação (Android/iOS) e registra o Service Worker offline. */
+    function initPwaSupport() {
+      let deferredInstallPrompt = null;
+      const isStandalone = isRunningStandalone();
+      const isIos = isIosMobileDevice();
+      const isDismissed = storageGet(PWA_BANNER_DISMISSED_KEY) === '1';
+
+      const setFooterStatus = (label) => {
+        if (els.pwaStatusLabel) els.pwaStatusLabel.textContent = label;
+      };
+
+      const showInstallBanner = ({ buttonLabel, subtitle, showIosSteps = false }) => {
+        if (els.pwaInstallActionBtn && buttonLabel) {
+          els.pwaInstallActionBtn.textContent = buttonLabel;
+        }
+        if (els.pwaInstallSubtitle && subtitle) {
+          els.pwaInstallSubtitle.textContent = subtitle;
+        }
+        if (els.iosInstallGuideText) {
+          els.iosInstallGuideText.classList.toggle('hidden', !showIosSteps);
+        }
+        els.pwaInstallBanner?.classList.remove('hidden');
+      };
+
+      if (isStandalone) {
+        els.pwaInstallBanner?.classList.add('hidden');
+        setFooterStatus('App instalado • Modo offline ativo');
+      } else if (isIos && !isDismissed) {
+        showInstallBanner({
+          buttonLabel: 'Como instalar',
+          subtitle: 'Adicione à Tela de Início do iPhone para usar offline',
+          showIosSteps: false
+        });
+      }
+
+      window.addEventListener('beforeinstallprompt', (event) => {
+        if (isIos) return;
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        if (isStandalone || storageGet(PWA_BANNER_DISMISSED_KEY) === '1') return;
+        showInstallBanner({
+          buttonLabel: 'Instalar',
+          subtitle: 'Instale no celular para abrir direto e usar offline',
+          showIosSteps: false
+        });
+      });
+
+      window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+        els.pwaInstallBanner?.classList.add('hidden');
+        storageSet(PWA_BANNER_DISMISSED_KEY, '1');
+        setFooterStatus('App instalado • Modo offline ativo');
+        showToast('Guia Metrô SP instalado com sucesso!');
+      });
+
+      const handleInstallTrigger = async (toggleIosSteps) => {
+        if (isStandalone) {
+          showToast('Aplicativo já instalado na tela inicial');
+          return;
+        }
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          const choice = await deferredInstallPrompt.userChoice.catch(() => null);
+          deferredInstallPrompt = null;
+          if (choice && choice.outcome === 'accepted') {
+            els.pwaInstallBanner?.classList.add('hidden');
+            showToast('Instalação do aplicativo iniciada!');
+          }
+          return;
+        }
+        if (isIos) {
+          els.pwaInstallBanner?.classList.remove('hidden');
+          if (els.iosInstallGuideText) {
+            if (toggleIosSteps) {
+              els.iosInstallGuideText.classList.toggle('hidden');
+            } else {
+              els.iosInstallGuideText.classList.remove('hidden');
+              els.pwaInstallBanner?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }
+          return;
+        }
+        showToast('No menu do navegador (⋮ ou Compartilhar), toque em "Instalar aplicativo"');
+      };
+
+      els.pwaInstallActionBtn?.addEventListener('click', () => handleInstallTrigger(true));
+      els.footerInstallPwaBtn?.addEventListener('click', () => handleInstallTrigger(false));
+      els.dismissPwaBannerBtn?.addEventListener('click', () => {
+        els.pwaInstallBanner?.classList.add('hidden');
+        els.iosInstallGuideText?.classList.add('hidden');
+        storageSet(PWA_BANNER_DISMISSED_KEY, '1');
+      });
+
+      const isSecureOrigin =
+        window.location.protocol === 'https:' ||
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+
+      if (!('serviceWorker' in navigator) || !isSecureOrigin) return;
+
+      const registerServiceWorker = async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+          setFooterStatus(
+            isStandalone
+              ? 'App instalado • Modo offline ativo'
+              : 'PWA pronto • Offline disponível após carregar'
+          );
+          registration.addEventListener('updatefound', () => {
+            const installing = registration.installing;
+            if (!installing) return;
+            installing.addEventListener('statechange', () => {
+              if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                showToast('Nova versão do app disponível. Recarregue para atualizar.');
+              }
+            });
+          });
+        } catch (err) {
+          setFooterStatus('App Web • 20 destinos prontos');
+        }
+      };
+
+      if (document.readyState === 'complete') {
+        registerServiceWorker();
+      } else {
+        window.addEventListener('load', registerServiceWorker, { once: true });
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       const capturedKeyFromUrl = captureApiKeyFromUrl();
       loadPersistedPreferences();
@@ -3403,6 +3652,7 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       setInterval(updateLiveClock, 15000);
       bindEvents();
       renderAll();
+      initPwaSupport();
       if (capturedKeyFromUrl) {
         showToast('Chave Gemini salva e removida da URL com segurança');
       }
