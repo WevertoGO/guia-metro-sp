@@ -191,6 +191,37 @@
             </div>
           </div>
 
+          <!-- Quick Actions: Uber back to Base & Open Origin in Maps -->
+          <div class="mt-3 grid grid-cols-2 gap-2">
+            <a
+              id="originUberBtn"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Chamar Uber da sua localização atual até esta origem"
+              class="flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.99] transition shadow-sm"
+            >
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 17h14M6 12l1.5-4.5A2 2 0 019.4 6h5.2a2 2 0 011.9 1.5L18 12M4 12h16v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z" />
+              </svg>
+              <span>Pedir Uber p/ Base</span>
+            </a>
+            <a
+              id="originMapsBtn"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Abrir esta origem no Google Maps"
+              class="flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-800 hover:bg-slate-200/80 border border-slate-200/80 active:scale-[0.99] transition"
+            >
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#0455A1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Abrir no Maps</span>
+            </a>
+          </div>
+
           <!-- Mapped Base Stations Accordion / Summary -->
           <div class="mt-3 pt-3 border-t border-slate-100">
             <button
@@ -588,11 +619,24 @@
                 <span>Abrir Rota no Google Maps</span>
               </a>
               <a
+                id="routeUberBtn"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Chamar Uber da Origem Fixa até este destino"
+                class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition shadow-sm"
+              >
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 17h14M6 12l1.5-4.5A2 2 0 019.4 6h5.2a2 2 0 011.9 1.5L18 12M4 12h16v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z" />
+                </svg>
+                <span>Pedir Uber até o Destino</span>
+              </a>
+              <a
                 id="whatsappShareBtn"
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="sm:col-span-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-[#007E5E] text-white hover:bg-emerald-800 transition shadow-sm"
+                class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-[#007E5E] text-white hover:bg-emerald-800 transition shadow-sm"
               >
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.531.078-1.203.109-1.938-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.328-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.609-.391.813-.391.203 0 .406.016.578.016.188 0 .438-.078.688.516.25.609.859 2.094.938 2.25.078.156.125.344.031.547-.094.203-.141.328-.281.5-.141.172-.297.391-.422.516-.141.141-.297.297-.125.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.453.297.141.469.125.641-.078.172-.203.75-.875.953-1.172.203-.297.406-.25.672-.141.266.109 1.703.797 2 .953.297.156.484.219.563.344.078.125.078.719-.172 1.422z" />
@@ -878,6 +922,12 @@
     };
 
     const DEFAULT_ORIGIN = 'Condomínio DNA Vila Mariana (R. Dr. Neto de Araújo, 265 - Vila Mariana, SP)';
+    const DEFAULT_ORIGIN_COORDS = {
+      lat: -23.587209,
+      lng: -46.632397,
+      address: 'R. Dr. Neto de Araújo, 265 - Vila Mariana, São Paulo - SP',
+      nickname: 'DNA Vila Mariana'
+    };
 
     const STORAGE_KEYS = {
       GEMINI_API_KEY: 'gemini_api_key',
@@ -1595,6 +1645,8 @@
       resetOriginBtn: document.getElementById('resetOriginBtn'),
       saveOriginBtn: document.getElementById('saveOriginBtn'),
       toggleBaseStationsBtn: document.getElementById('toggleBaseStationsBtn'),
+      originUberBtn: document.getElementById('originUberBtn'),
+      originMapsBtn: document.getElementById('originMapsBtn'),
       baseStationsChevron: document.getElementById('baseStationsChevron'),
       baseStationsList: document.getElementById('baseStationsList'),
       baseStationLinkVilaMariana: document.getElementById('baseStationLinkVilaMariana'),
@@ -1633,6 +1685,7 @@
       timelineStepsContainer: document.getElementById('timelineStepsContainer'),
       mapsWalkToStationBtn: document.getElementById('mapsWalkToStationBtn'),
       mapsFullRouteBtn: document.getElementById('mapsFullRouteBtn'),
+      routeUberBtn: document.getElementById('routeUberBtn'),
       whatsappShareBtn: document.getElementById('whatsappShareBtn'),
       verdictCard: document.getElementById('verdictCard'),
       verdictIconBox: document.getElementById('verdictIconBox'),
@@ -1723,10 +1776,77 @@
       return false;
     }
 
+    /**
+     * Resolve coordinates and address metadata for the active origin.
+     */
+    function getOriginLocationSpec() {
+      const isDefault = !state.isCustomOrigin && state.origin === DEFAULT_ORIGIN;
+      if (isDefault) {
+        return {
+          address: DEFAULT_ORIGIN_COORDS.address,
+          nickname: DEFAULT_ORIGIN_COORDS.nickname,
+          coords: { lat: DEFAULT_ORIGIN_COORDS.lat, lng: DEFAULT_ORIGIN_COORDS.lng }
+        };
+      }
+      return {
+        address: state.origin,
+        nickname: state.origin,
+        coords: null
+      };
+    }
+
+    /**
+     * Build an Uber Universal Deep Link for pickup and dropoff points.
+     */
+    function buildUberUrl({ useCurrentPickup = false, pickupSpec = null, dropoffSpec }) {
+      const parts = ['action=setPickup'];
+
+      if (useCurrentPickup) {
+        parts.push('pickup=my_location');
+      } else if (pickupSpec) {
+        if (pickupSpec.coords) {
+          parts.push(`pickup[latitude]=${encodeURIComponent(pickupSpec.coords.lat)}`);
+          parts.push(`pickup[longitude]=${encodeURIComponent(pickupSpec.coords.lng)}`);
+        }
+        if (pickupSpec.address) {
+          parts.push(`pickup[formatted_address]=${encodeURIComponent(pickupSpec.address)}`);
+        }
+        if (pickupSpec.nickname) {
+          parts.push(`pickup[nickname]=${encodeURIComponent(pickupSpec.nickname)}`);
+        }
+      }
+
+      if (dropoffSpec) {
+        if (dropoffSpec.coords) {
+          parts.push(`dropoff[latitude]=${encodeURIComponent(dropoffSpec.coords.lat)}`);
+          parts.push(`dropoff[longitude]=${encodeURIComponent(dropoffSpec.coords.lng)}`);
+        }
+        if (dropoffSpec.address) {
+          parts.push(`dropoff[formatted_address]=${encodeURIComponent(dropoffSpec.address)}`);
+        }
+        if (dropoffSpec.nickname) {
+          parts.push(`dropoff[nickname]=${encodeURIComponent(dropoffSpec.nickname)}`);
+        }
+      }
+
+      return `https://m.uber.com/ul/?${parts.join('&')}`;
+    }
+
     function syncOriginUI() {
       els.originDisplayText.textContent = state.origin;
       els.originInput.value = state.origin;
       els.customOriginTag.classList.toggle('hidden', !state.isCustomOrigin);
+
+      const originSpec = getOriginLocationSpec();
+      if (els.originUberBtn) {
+        els.originUberBtn.href = buildUberUrl({
+          useCurrentPickup: true,
+          dropoffSpec: originSpec
+        });
+      }
+      if (els.originMapsBtn) {
+        els.originMapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(originSpec.address)}`;
+      }
 
       const encodedOrigin = encodeURIComponent(state.origin);
       if (els.baseStationLinkVilaMariana) {
@@ -2146,15 +2266,26 @@
         `;
       }).join('');
 
-      // Google Maps & WhatsApp Action Links
+      // Google Maps, Uber & WhatsApp Action Links
       const originEncoded = encodeURIComponent(state.origin);
       const baseStationInfo = BASE_STATIONS[route.boardingStation];
       const stationQuery = encodeURIComponent(baseStationInfo ? baseStationInfo.mapsQuery : `${route.boardingStation} Metrô São Paulo`);
-      const destQuery = encodeURIComponent(route.mapsDestinationQuery || `${route.name} São Paulo`);
+      const destAddress = route.mapsDestinationQuery || `${route.name}, São Paulo - SP`;
+      const destQuery = encodeURIComponent(destAddress);
       const mapsFullUrl = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${destQuery}&travelmode=transit`;
 
       els.mapsWalkToStationBtn.href = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${stationQuery}&travelmode=walking`;
       els.mapsFullRouteBtn.href = mapsFullUrl;
+      if (els.routeUberBtn) {
+        els.routeUberBtn.href = buildUberUrl({
+          pickupSpec: getOriginLocationSpec(),
+          dropoffSpec: {
+            address: destAddress,
+            nickname: route.name,
+            coords: null
+          }
+        });
+      }
       els.whatsappShareBtn.href = buildWhatsAppShareUrl(route, mapsFullUrl);
 
       // Render Verdict Card
