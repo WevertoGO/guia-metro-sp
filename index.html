@@ -75,6 +75,32 @@
     .live-dot {
       animation: softPulse 2s infinite ease-in-out;
     }
+    /* Smooth entrance and ring highlight when planning or loading a destination */
+    @keyframes routeFocusPulse {
+      0% {
+        opacity: 0.72;
+        transform: translateY(10px) scale(0.985);
+        box-shadow: 0 0 0 0 rgba(4, 85, 161, 0.42);
+      }
+      45% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 0 6px rgba(4, 85, 161, 0.2);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 0 0 rgba(4, 85, 161, 0);
+      }
+    }
+    .animate-route-focus {
+      animation: routeFocusPulse 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-route-focus {
+        animation: none;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900">
@@ -388,7 +414,7 @@
                 <button
                   type="button"
                   id="planRouteBtn"
-                  class="px-4 py-3 rounded-xl text-sm font-bold bg-[#0455A1] text-white hover:bg-blue-800 active:scale-[0.99] transition shadow-sm shrink-0 flex items-center gap-1.5"
+                  class="px-4 py-3 rounded-xl text-sm font-bold bg-[#0455A1] text-white hover:bg-blue-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait transition shadow-sm shrink-0 flex items-center gap-1.5"
                 >
                   <span>Planejar</span>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -592,7 +618,7 @@
       <div class="lg:col-span-7 space-y-4">
 
         <!-- Loading State (Visible during AI custom route calculation) -->
-        <div id="aiLoadingCard" class="hidden bg-white rounded-2xl border border-blue-200 shadow-sm p-6 text-center space-y-3">
+        <div id="aiLoadingCard" class="hidden scroll-mt-20 bg-white rounded-2xl border border-blue-200 shadow-sm p-6 text-center space-y-3">
           <div class="w-11 h-11 mx-auto rounded-2xl bg-blue-50 text-[#0455A1] flex items-center justify-center">
             <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
@@ -2297,21 +2323,86 @@
       document.body.classList.toggle('overflow-hidden', Boolean(aiOpen || destOpen));
     }
 
+    let pendingScrollTimer = null;
+
     /**
-     * Scroll the suggested route card into view on smaller mobile viewports.
+     * Play a short entrance and ring-highlight animation on the target planning card.
      */
-    function scrollToRouteOnMobile() {
-      if (window.innerWidth < 1024 && els.routeResultCard) {
-        requestAnimationFrame(() => {
-          els.routeResultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+    function animateRouteTarget(targetEl) {
+      if (!targetEl) return;
+      targetEl.classList.remove('animate-route-focus');
+      void targetEl.offsetWidth;
+      targetEl.classList.add('animate-route-focus');
+      targetEl.addEventListener(
+        'animationend',
+        () => targetEl.classList.remove('animate-route-focus'),
+        { once: true }
+      );
+    }
+
+    /**
+     * Compute scroll Y position just below the sticky app header.
+     */
+    function computeTargetScrollY(targetEl) {
+      const header = document.querySelector('header');
+      const headerOffset = header ? Math.ceil(header.getBoundingClientRect().height) + 12 : 76;
+      const rect = targetEl.getBoundingClientRect();
+      return Math.max(0, Math.round(window.scrollY + rect.top - headerOffset));
+    }
+
+    /**
+     * Pick the active planning target (#aiLoadingCard while loading, else #routeResultCard).
+     */
+    function getActivePlanningTarget() {
+      const isLoading = els.aiLoadingCard && !els.aiLoadingCard.classList.contains('hidden');
+      return isLoading ? els.aiLoadingCard : els.routeResultCard;
+    }
+
+    /**
+     * Smoothly scroll to the active planning target on mobile and highlight on arrival.
+     */
+    function scrollToRouteOnMobile({ pulse = true, waitKeyboard = false } = {}) {
+      const targetEl = getActivePlanningTarget();
+      if (!targetEl) return;
+
+      if (pulse) {
+        animateRouteTarget(targetEl);
       }
+
+      if (window.innerWidth >= 1024) return;
+
+      if (pendingScrollTimer) {
+        clearTimeout(pendingScrollTimer);
+        pendingScrollTimer = null;
+      }
+
+      const performSmoothScroll = () => {
+        const currentTarget = getActivePlanningTarget();
+        if (!currentTarget) return;
+        const top = computeTargetScrollY(currentTarget);
+        window.scrollTo({ top, behavior: 'smooth' });
+      };
+
+      requestAnimationFrame(() => {
+        performSmoothScroll();
+        if (waitKeyboard) {
+          // Re-align once after mobile virtual keyboard collapses (~220ms) unless user scrolled
+          let userTouched = false;
+          const cancel = () => { userTouched = true; };
+          window.addEventListener('touchstart', cancel, { once: true, passive: true });
+          pendingScrollTimer = setTimeout(() => {
+            window.removeEventListener('touchstart', cancel);
+            pendingScrollTimer = null;
+            if (!userTouched) performSmoothScroll();
+          }, 220);
+        }
+      });
     }
 
     /**
      * Activate one of the 20 local curated routes cleanly and close pickers.
      */
-    function activateLocalDestination(dest, { shouldRecord = true, shouldScroll = true } = {}) {
+    function activateLocalDestination(dest, { shouldRecord = true, shouldScroll = true, waitKeyboard = false } = {}) {
       if (!dest) return;
       blurActiveInput();
       state.currentRoute = dest;
@@ -2325,7 +2416,7 @@
       }
       renderAll();
       if (shouldScroll) {
-        scrollToRouteOnMobile();
+        scrollToRouteOnMobile({ pulse: true, waitKeyboard });
       }
     }
 
@@ -2525,7 +2616,7 @@
             return;
           }
 
-          planCustomDestinationWithAI(item.query || item.label);
+          planCustomDestinationWithAI(item.query || item.label, { waitKeyboard: false });
         });
       });
     }
@@ -3037,7 +3128,8 @@
       };
     }
 
-    async function planCustomDestinationWithAI(queryText) {
+    async function planCustomDestinationWithAI(queryText, { waitKeyboard = true } = {}) {
+      blurActiveInput();
       const apiKey = getStoredGeminiApiKey();
 
       // Offline fallback immediately when no API key is configured
@@ -3048,12 +3140,15 @@
         state.isOfflineFallback = true;
         recordRecentSearch({ type: 'custom', label: fallbackRoute.name, query: queryText, route: fallbackRoute });
         renderAll();
+        scrollToRouteOnMobile({ pulse: true, waitKeyboard });
         showToast('Modo offline: configure sua chave IA no topo para rotas por IA');
         return;
       }
 
+      if (els.planRouteBtn) els.planRouteBtn.disabled = true;
       els.aiLoadingCard.classList.remove('hidden');
       els.routeResultCard.classList.add('opacity-50', 'pointer-events-none');
+      scrollToRouteOnMobile({ pulse: true, waitKeyboard });
 
       const systemPrompt = `Você é um especialista em mobilidade urbana, Metrô/CPTM de São Paulo e logística familiar.
 A origem do usuário é: "${state.origin}".
@@ -3187,8 +3282,10 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
           showToast('Roteiro base gerado — confira no Google Maps');
         }
       } finally {
+        if (els.planRouteBtn) els.planRouteBtn.disabled = false;
         els.aiLoadingCard.classList.add('hidden');
         els.routeResultCard.classList.remove('opacity-50', 'pointer-events-none');
+        scrollToRouteOnMobile({ pulse: true });
       }
     }
 
@@ -3256,17 +3353,15 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       document.querySelectorAll('.ac-local-item').forEach((btn) => {
         btn.addEventListener('click', () => {
           const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.matchId);
-          activateLocalDestination(found, { shouldRecord: true, shouldScroll: true });
+          activateLocalDestination(found, { shouldRecord: true, shouldScroll: true, waitKeyboard: true });
         });
       });
 
       const aiBtn = document.getElementById('acAiSearchBtn');
       if (aiBtn) {
         aiBtn.addEventListener('click', () => {
-          blurActiveInput();
           els.autocompleteDropdown.classList.add('hidden');
-          planCustomDestinationWithAI(query.trim());
-          scrollToRouteOnMobile();
+          planCustomDestinationWithAI(query.trim(), { waitKeyboard: true });
         });
       }
     }
@@ -3288,12 +3383,11 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       );
 
       if (exactMatch) {
-        activateLocalDestination(exactMatch, { shouldRecord: true, shouldScroll: true });
+        activateLocalDestination(exactMatch, { shouldRecord: true, shouldScroll: true, waitKeyboard: true });
         return;
       }
 
-      planCustomDestinationWithAI(raw);
-      scrollToRouteOnMobile();
+      planCustomDestinationWithAI(raw, { waitKeyboard: true });
     }
 
     // =========================================================================

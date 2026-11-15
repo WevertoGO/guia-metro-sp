@@ -1,4 +1,4 @@
-const CACHE_NAME = 'metro-sp-pwa-v1';
+const CACHE_NAME = 'metro-sp-pwa-v2';
 const RUNTIME_CACHE = 'metro-sp-runtime-v1';
 
 const PRECACHE_ASSETS = [
