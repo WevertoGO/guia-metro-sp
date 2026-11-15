@@ -143,7 +143,7 @@
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-[#0455A1]">Origem Fixa</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-[#0455A1]">Origem Fixa • Hotel</span>
                   <span id="customOriginTag" class="hidden text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Editada</span>
                 </div>
                 <p id="originDisplayText" class="text-sm font-bold text-slate-900 leading-snug mt-0.5">
@@ -198,13 +198,13 @@
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              title="Chamar Uber da sua localização atual até esta origem"
+              title="Chamar Uber da sua localização atual até o hotel/origem"
               class="flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.99] transition shadow-sm"
             >
               <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 17h14M6 12l1.5-4.5A2 2 0 019.4 6h5.2a2 2 0 011.9 1.5L18 12M4 12h16v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z" />
               </svg>
-              <span>Pedir Uber p/ Base</span>
+              <span>Pedir Uber p/ Hotel</span>
             </a>
             <a
               id="originMapsBtn"
@@ -555,6 +555,9 @@
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
+                  <span id="routeDirectionBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-sky-500/20 text-sky-200 border border-sky-400/30">
+                    Ida • Hotel → Destino
+                  </span>
                   <span id="routeCategoryBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/15 text-blue-200">
                     Cultura &amp; Lazer
                   </span>
@@ -588,11 +591,31 @@
 
           <!-- Visual Step-by-Step Timeline -->
           <div class="p-4 sm:p-5">
+            <!-- Direction Switcher: Ida vs Volta ao Hotel -->
+            <div class="mb-4 p-1 rounded-xl bg-slate-100 border border-slate-200/80 grid grid-cols-2 gap-1" role="group" aria-label="Sentido do trajeto">
+              <button
+                type="button"
+                id="dirOutboundBtn"
+                aria-pressed="true"
+                class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold transition text-center bg-white text-slate-900 shadow-sm whitespace-nowrap"
+              >
+                Ida: Hotel → Lugar
+              </button>
+              <button
+                type="button"
+                id="dirReturnBtn"
+                aria-pressed="false"
+                class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-semibold transition text-center text-slate-600 hover:text-slate-900 whitespace-nowrap"
+              >
+                Volta: Lugar → Hotel
+              </button>
+            </div>
+
             <div id="timelineStepsContainer" class="space-y-0">
               <!-- Populated dynamically -->
             </div>
 
-            <!-- Route Actions: Google Maps + WhatsApp Share -->
+            <!-- Route Actions: Google Maps + Uber + WhatsApp Share -->
             <div class="mt-5 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <a
                 id="mapsWalkToStationBtn"
@@ -604,7 +627,7 @@
                 <svg class="w-4 h-4 text-[#0455A1]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 4a2 2 0 100 4 2 2 0 000-4zm-2 7l-2 9m2-9l3 3 2 6m-5-9l-3 2v3" />
                 </svg>
-                <span>Caminhada até a Estação</span>
+                <span id="mapsWalkBtnLabel">Caminhada até a Estação</span>
               </a>
               <a
                 id="mapsFullRouteBtn"
@@ -616,20 +639,20 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
-                <span>Abrir Rota no Google Maps</span>
+                <span id="mapsFullRouteBtnLabel">Abrir Rota no Google Maps</span>
               </a>
               <a
                 id="routeUberBtn"
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Chamar Uber da Origem Fixa até este destino"
+                title="Chamar Uber no sentido selecionado"
                 class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition shadow-sm"
               >
                 <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 17h14M6 12l1.5-4.5A2 2 0 019.4 6h5.2a2 2 0 011.9 1.5L18 12M4 12h16v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z" />
                 </svg>
-                <span>Pedir Uber até o Destino</span>
+                <span id="routeUberBtnLabel">Pedir Uber até o Destino</span>
               </a>
               <a
                 id="whatsappShareBtn"
@@ -1491,6 +1514,112 @@
       }
     ];
 
+    // Return steps (Lugar -> Hotel / Base Vila Mariana) for all 20 curated destinations
+    const RETURN_STEPS_BY_ID = {
+      'paulista-masp': [
+        { type: 'walk', title: 'Caminhada do MASP até Estação Trianon-Masp', subtitle: '150m até a entrada da estação na calçada da Av. Paulista', durationMinutes: 4 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '4 estações: Brigadeiro, Paraíso, Ana Rosa → Chácara Klabin', durationMinutes: 9 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro (calçada ampla)', durationMinutes: 11 }
+      ],
+      'aquario-sp': [
+        { type: 'uber', title: 'Uber curto ou caminhada do Aquário até Estação Santos-Imigrantes', subtitle: '1,2 km (~5 min de Uber pela R. Huet Bacelar ou ~16 min a pé)', durationMinutes: 16 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '1 estação até Chácara Klabin', durationMinutes: 3 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'ibirapuera': [
+        { type: 'walk', title: 'Saída do Parque até Estação AACD-Servidor', subtitle: '1,1 km (~13 min a pé pela R. Pedro de Toledo/passarela ou 4 min de Uber do Portão 3)', durationMinutes: 13 },
+        { type: 'metro', lineCode: 'L5-Lilás', title: 'Embarque na Linha 5-Lilás (Sentido Chácara Klabin)', subtitle: '3 estações: Hospital São Paulo, Santa Cruz → Chácara Klabin (terminal)', durationMinutes: 7 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'catavento-mercadao': [
+        { type: 'uber', title: 'Trecho do Catavento / Mercadão até Estação São Bento', subtitle: '750m (~4 min de Uber curto na porta ou 9 min a pé)', durationMinutes: 9 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '7 estações diretas até Vila Mariana (via Sé)', durationMinutes: 14 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'pinacoteca-luz': [
+        { type: 'walk', title: 'Entrada na Estação Luz (frente à Pinacoteca)', subtitle: '100m em frente à saída do parque e do museu', durationMinutes: 2 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '8 estações diretas até Vila Mariana (sem baldeação)', durationMinutes: 16 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'liberdade': [
+        { type: 'walk', title: 'Entrada na Estação Japão-Liberdade', subtitle: '80m na Praça da Liberdade (ou 6 min planos até São Joaquim se cheia)', durationMinutes: 2 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '5 estações diretas até Vila Mariana', durationMinutes: 10 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'zoologico-sp': [
+        { type: 'uber', title: 'Conexão Portaria do Zoológico → Terminal Jabaquara', subtitle: 'Ônibus oficial Ponte Orca ou 7 min de Uber curto (3,5 km)', durationMinutes: 12 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '6 estações diretas até Vila Mariana', durationMinutes: 13 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'beco-batman': [
+        { type: 'uber', title: 'Subida do Beco do Batman → Estação Vila Madalena', subtitle: '1,1 km (~5 min de Uber curto pela R. Harmonia/Aspicuelta — evita ladeira íngreme)', durationMinutes: 9 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '9 estações diretas até Chácara Klabin', durationMinutes: 20 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'shopping-santa-cruz': [
+        { type: 'walk', title: 'Acesso interno do Shopping à Estação Santa Cruz', subtitle: 'Entrada integrada pelas catracas internas sem sair na rua', durationMinutes: 2 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: 'Apenas 1 estação até Vila Mariana', durationMinutes: 2 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'villa-lobos-eldorado': [
+        { type: 'metro', lineCode: 'L9-Esmeralda', title: 'Linha 9-Esmeralda (Sentido Bruno Covas / Mendes–Vila Natal)', subtitle: 'De Villa-Lobos–Jaguaré (2 est.) ou Hebraica-Rebouças (1 est.) até Pinheiros', durationMinutes: 14 },
+        { type: 'transfer', lineCode: 'L4-Amarela', title: 'Baldeação → Linha 4-Amarela (Sentido Luz)', subtitle: 'Pinheiros → Paulista (3 estações: Faria Lima, Fradique Coutinho, Oscar Freire)', durationMinutes: 10 },
+        { type: 'transfer', lineCode: 'L2-Verde', title: 'Baldeação → Linha 2-Verde (Sentido Vila Prudente)', subtitle: 'Consolação → Chácara Klabin (5 estações)', durationMinutes: 11 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'allianz-parque': [
+        { type: 'uber', title: 'Allianz Parque → Estação Clínicas (ou 10 min até Barra Funda)', subtitle: '3,2 km (~9 min de Uber até Clínicas na L2-Verde, evitando baldeações)', durationMinutes: 18 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '6 estações diretas de Clínicas até Chácara Klabin', durationMinutes: 13 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'museu-ipiranga': [
+        { type: 'uber', title: 'Uber curto do Museu até Estação Alto do Ipiranga', subtitle: '1,3 km (~5 min de carro ou 16 min caminhando)', durationMinutes: 13 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '2 estações: Santos-Imigrantes → Chácara Klabin', durationMinutes: 4 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'centro-farol-santander': [
+        { type: 'walk', title: 'Caminhada do Farol Santander até Estação São Bento', subtitle: '250m planos pela R. João Brícola / Boa Vista', durationMinutes: 3 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '7 estações diretas até Vila Mariana', durationMinutes: 14 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'aeroporto-congonhas': [
+        { type: 'uber', title: 'Uber curto Desembarque CGH → Estação Campo Belo', subtitle: '2,8 km (~6 min saindo pela área de aplicativos do piso inferior)', durationMinutes: 6 },
+        { type: 'metro', lineCode: 'L5-Lilás', title: 'Embarque na Linha 5-Lilás (Sentido Chácara Klabin)', subtitle: '6 estações: Eucaliptos, Moema, AACD-Servidor, Hosp. São Paulo, Santa Cruz → Chácara Klabin', durationMinutes: 10 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'aeroporto-guarulhos': [
+        { type: 'metro', lineCode: 'L13-Jade', title: 'Expresso Aeroporto (Linha 13-Jade → Estação Luz)', subtitle: 'Ônibus circular dos Terminais 1, 2 e 3 até a estação + trem de hora em hora direto até a Luz', durationMinutes: 43 },
+        { type: 'transfer', lineCode: 'L1-Azul', title: 'Baldeação na Luz → Linha 1-Azul (Sentido Jabaquara)', subtitle: '8 estações diretas até Vila Mariana', durationMinutes: 16 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'instituto-butantan': [
+        { type: 'uber', title: 'Portaria do Butantan → Estação Butantã', subtitle: '1,1 km (~4 min de Uber curto ou circular USP/Butantã)', durationMinutes: 9 },
+        { type: 'metro', lineCode: 'L4-Amarela', title: 'Linha 4-Amarela (Sentido Luz)', subtitle: '4 estações: Pinheiros, Faria Lima, Fradique Coutinho, Oscar Freire → Paulista', durationMinutes: 11 },
+        { type: 'transfer', lineCode: 'L2-Verde', title: 'Baldeação → Linha 2-Verde (Sentido Vila Prudente)', subtitle: 'Consolação → Chácara Klabin (5 estações)', durationMinutes: 11 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'museu-lingua-portuguesa': [
+        { type: 'walk', title: 'Acesso interno da Estação da Luz', subtitle: 'Plataformas integradas logo na saída do museu', durationMinutes: 1 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '8 estações diretas até Vila Mariana', durationMinutes: 16 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ],
+      'japan-house-paulista': [
+        { type: 'walk', title: 'Caminhada plana até Estação Brigadeiro', subtitle: '200m da Japan House ou 450m do Shopping Cidade São Paulo', durationMinutes: 3 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '3 estações diretas: Paraíso, Ana Rosa → Chácara Klabin', durationMinutes: 7 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'sesc-pompeia': [
+        { type: 'uber', title: 'Uber curto Sesc Pompeia → Estação Vila Madalena', subtitle: '2,4 km (~8 min saindo da R. Clélia)', durationMinutes: 8 },
+        { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '9 estações diretas até Chácara Klabin', durationMinutes: 20 },
+        { type: 'walk', title: 'Caminhada da Estação Chácara Klabin até o Hotel (DNA Vila Mariana)', subtitle: '900m via R. Vergueiro', durationMinutes: 11 }
+      ],
+      'parque-aclimacao': [
+        { type: 'walk', title: 'Caminhada Parque da Aclimação → Estação Vergueiro', subtitle: '1,0 km (~12 min a pé)', durationMinutes: 12 },
+        { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '3 estações: Paraíso, Ana Rosa → Vila Mariana', durationMinutes: 6 },
+        { type: 'walk', title: 'Caminhada da Estação Vila Mariana até o Hotel (DNA Vila Mariana)', subtitle: '600m via Av. Lins de Vasconcelos e R. Dr. Neto de Araújo', durationMinutes: 9 }
+      ]
+    };
+
     // =========================================================================
     // 3. HOURLY SCHEDULE DATA (05h TO 00h) FOR METRO & UBER
     // =========================================================================
@@ -1611,6 +1740,7 @@
       child6: 1,
       child3: 1,
       currentRoute: DESTINATIONS_DB[0],
+      direction: 'outbound',
       isAiRoute: false,
       isOfflineFallback: false,
       selectedHour: new Date().getHours() >= 5 ? new Date().getHours() : 10,
@@ -1675,6 +1805,7 @@
       fareRoundTripText: document.getElementById('fareRoundTripText'),
       aiLoadingCard: document.getElementById('aiLoadingCard'),
       routeResultCard: document.getElementById('routeResultCard'),
+      routeDirectionBadge: document.getElementById('routeDirectionBadge'),
       routeCategoryBadge: document.getElementById('routeCategoryBadge'),
       aiGeneratedBadge: document.getElementById('aiGeneratedBadge'),
       routeTitle: document.getElementById('routeTitle'),
@@ -1682,10 +1813,15 @@
       routeTotalTime: document.getElementById('routeTotalTime'),
       routeLinesBadges: document.getElementById('routeLinesBadges'),
       accessibilitySeals: document.getElementById('accessibilitySeals'),
+      dirOutboundBtn: document.getElementById('dirOutboundBtn'),
+      dirReturnBtn: document.getElementById('dirReturnBtn'),
       timelineStepsContainer: document.getElementById('timelineStepsContainer'),
       mapsWalkToStationBtn: document.getElementById('mapsWalkToStationBtn'),
+      mapsWalkBtnLabel: document.getElementById('mapsWalkBtnLabel'),
       mapsFullRouteBtn: document.getElementById('mapsFullRouteBtn'),
+      mapsFullRouteBtnLabel: document.getElementById('mapsFullRouteBtnLabel'),
       routeUberBtn: document.getElementById('routeUberBtn'),
+      routeUberBtnLabel: document.getElementById('routeUberBtnLabel'),
       whatsappShareBtn: document.getElementById('whatsappShareBtn'),
       verdictCard: document.getElementById('verdictCard'),
       verdictIconBox: document.getElementById('verdictIconBox'),
@@ -1796,6 +1932,23 @@
     }
 
     /**
+     * Append Uber Deep Link query parameters for a pickup or dropoff point.
+     */
+    function appendUberPointParams(parts, prefix, spec) {
+      if (!spec) return;
+      if (spec.coords) {
+        parts.push(`${prefix}[latitude]=${encodeURIComponent(spec.coords.lat)}`);
+        parts.push(`${prefix}[longitude]=${encodeURIComponent(spec.coords.lng)}`);
+      }
+      if (spec.address) {
+        parts.push(`${prefix}[formatted_address]=${encodeURIComponent(spec.address)}`);
+      }
+      if (spec.nickname) {
+        parts.push(`${prefix}[nickname]=${encodeURIComponent(spec.nickname)}`);
+      }
+    }
+
+    /**
      * Build an Uber Universal Deep Link for pickup and dropoff points.
      */
     function buildUberUrl({ useCurrentPickup = false, pickupSpec = null, dropoffSpec }) {
@@ -1803,31 +1956,10 @@
 
       if (useCurrentPickup) {
         parts.push('pickup=my_location');
-      } else if (pickupSpec) {
-        if (pickupSpec.coords) {
-          parts.push(`pickup[latitude]=${encodeURIComponent(pickupSpec.coords.lat)}`);
-          parts.push(`pickup[longitude]=${encodeURIComponent(pickupSpec.coords.lng)}`);
-        }
-        if (pickupSpec.address) {
-          parts.push(`pickup[formatted_address]=${encodeURIComponent(pickupSpec.address)}`);
-        }
-        if (pickupSpec.nickname) {
-          parts.push(`pickup[nickname]=${encodeURIComponent(pickupSpec.nickname)}`);
-        }
+      } else {
+        appendUberPointParams(parts, 'pickup', pickupSpec);
       }
-
-      if (dropoffSpec) {
-        if (dropoffSpec.coords) {
-          parts.push(`dropoff[latitude]=${encodeURIComponent(dropoffSpec.coords.lat)}`);
-          parts.push(`dropoff[longitude]=${encodeURIComponent(dropoffSpec.coords.lng)}`);
-        }
-        if (dropoffSpec.address) {
-          parts.push(`dropoff[formatted_address]=${encodeURIComponent(dropoffSpec.address)}`);
-        }
-        if (dropoffSpec.nickname) {
-          parts.push(`dropoff[nickname]=${encodeURIComponent(dropoffSpec.nickname)}`);
-        }
-      }
+      appendUberPointParams(parts, 'dropoff', dropoffSpec);
 
       return `https://m.uber.com/ul/?${parts.join('&')}`;
     }
@@ -1848,15 +1980,16 @@
         els.originMapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(originSpec.address)}`;
       }
 
-      const encodedOrigin = encodeURIComponent(state.origin);
-      if (els.baseStationLinkVilaMariana) {
-        els.baseStationLinkVilaMariana.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Vila Mariana'].mapsQuery)}&travelmode=walking`;
-      }
-      if (els.baseStationLinkChacaraKlabin) {
-        els.baseStationLinkChacaraKlabin.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Chácara Klabin'].mapsQuery)}&travelmode=walking`;
-      }
-      if (els.baseStationLinkAnaRosa) {
-        els.baseStationLinkAnaRosa.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Ana Rosa'].mapsQuery)}&travelmode=walking`;
+      const encodedOrigin = encodeURIComponent(originSpec.address);
+      const baseLinks = [
+        [els.baseStationLinkVilaMariana, 'Estação Vila Mariana'],
+        [els.baseStationLinkChacaraKlabin, 'Estação Chácara Klabin'],
+        [els.baseStationLinkAnaRosa, 'Estação Ana Rosa']
+      ];
+      for (const [linkEl, stationKey] of baseLinks) {
+        if (linkEl) {
+          linkEl.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS[stationKey].mapsQuery)}&travelmode=walking`;
+        }
       }
     }
 
@@ -2003,19 +2136,112 @@
       els.aiSettingsModal.classList.add('hidden');
     }
 
-    function buildWhatsAppShareUrl(route, mapsFullUrl) {
+    /**
+     * Swap terminal names when inverting a São Paulo Metrô step description.
+     */
+    function invertMetroDirectionText(text) {
+      if (!text) return '';
+      const pairs = [
+        ['Tucuruvi', 'Jabaquara'],
+        ['Vila Madalena', 'Vila Prudente'],
+        ['Capão Redondo', 'Chácara Klabin'],
+        ['Vila Sônia', 'Luz'],
+        ['Palmeiras-Barra Funda', 'Corinthians-Itaquera']
+      ];
+      let out = text;
+      for (const [a, b] of pairs) {
+        if (out.includes(a) && !out.includes(b)) {
+          out = out.replaceAll(a, b);
+        } else if (out.includes(b) && !out.includes(a)) {
+          out = out.replaceAll(b, a);
+        }
+      }
+      return out;
+    }
+
+    /**
+     * Build fallback return steps if a cached or offline route lacks returnSteps.
+     */
+    function buildFallbackReturnSteps(route) {
+      const steps = Array.isArray(route.steps) ? route.steps : [];
+      if (steps.length === 0) return [];
+      const reversed = [...steps].reverse().map((step) => ({ ...step }));
+      const stationName = route.boardingStation || 'Estação Base';
+
+      return reversed.map((step, idx) => {
+        if (idx === reversed.length - 1) {
+          const baseStation = BASE_STATIONS[stationName];
+          const originLabel = !state.isCustomOrigin ? 'Hotel (DNA Vila Mariana)' : state.origin;
+          return {
+            ...step,
+            type: 'walk',
+            title: `Caminhada da ${stationName} até ${originLabel}`,
+            subtitle: !state.isCustomOrigin && baseStation
+              ? `${baseStation.distance} ${baseStation.walkRoute}`
+              : 'Consulte o botão Google Maps abaixo para o trecho final a pé'
+          };
+        }
+        if (idx === 0 && (step.type === 'walk' || step.type === 'uber')) {
+          return {
+            ...step,
+            title: `Saída de ${route.name} em direção ao Metrô`,
+            subtitle: step.subtitle
+          };
+        }
+        return {
+          ...step,
+          title: invertMetroDirectionText(step.title),
+          subtitle: invertMetroDirectionText(step.subtitle)
+        };
+      });
+    }
+
+    /**
+     * Return step list matching the selected direction (outbound or return).
+     */
+    function getStepsForDirection(route, isReturn) {
+      if (!isReturn) {
+        return route.steps || [];
+      }
+      const rawReturn =
+        (Array.isArray(route.returnSteps) && route.returnSteps.length > 0 && route.returnSteps) ||
+        (route.id && RETURN_STEPS_BY_ID[route.id]) ||
+        buildFallbackReturnSteps(route);
+
+      const cloned = rawReturn.map((step) => ({ ...step }));
+      if (state.isCustomOrigin && cloned.length > 0) {
+        const lastIdx = cloned.length - 1;
+        cloned[lastIdx] = {
+          ...cloned[lastIdx],
+          title: `Chegada em ${route.boardingStation} → ${state.origin}`,
+          subtitle: 'Confira no botão Google Maps abaixo o deslocamento até sua origem editada'
+        };
+      }
+      return cloned;
+    }
+
+    function buildWhatsAppShareUrl(route, mapsFullUrl, isReturn = false) {
       const lineNames = (route.linesUsed || [])
         .map((code) => LINE_STYLES[code]?.label || code)
         .join(' + ');
 
-      const lines = [
-        `🚇 *Roteiro Metrô & Mobilidade SP*`,
-        `📍 *Destino:* ${route.name}${route.neighborhood ? ` (${route.neighborhood})` : ''}`,
-        `🏠 *Origem:* ${state.origin}`,
-        `🚉 *Embarque:* ${route.boardingStation}`,
-        `🚊 *Linhas:* ${lineNames || 'A definir'}`,
-        `⏱️ *Tempo estimado:* ~${route.totalTimeMinutes} min`
-      ];
+      const lines = isReturn
+        ? [
+            `🚇 *Roteiro Metrô & Mobilidade SP (Volta ao Hotel)*`,
+            `📍 *Saindo de:* ${route.name}${route.neighborhood ? ` (${route.neighborhood})` : ''}`,
+            `🏨 *Voltando para:* ${state.origin}`,
+            `🚉 *Desembarque:* ${route.boardingStation}`,
+            `🚊 *Linhas:* ${lineNames || 'A definir'}`,
+            `⏱️ *Tempo estimado:* ~${route.totalTimeMinutes} min`
+          ]
+        : [
+            `🚇 *Roteiro Metrô & Mobilidade SP (Ida)*`,
+            `🏠 *Origem (Hotel):* ${state.origin}`,
+            `📍 *Destino:* ${route.name}${route.neighborhood ? ` (${route.neighborhood})` : ''}`,
+            `🚉 *Embarque:* ${route.boardingStation}`,
+            `🚊 *Linhas:* ${lineNames || 'A definir'}`,
+            `⏱️ *Tempo estimado:* ~${route.totalTimeMinutes} min`
+          ];
 
       if (route.verdictTitle) {
         lines.push(`💡 *Dica:* ${route.verdictTitle}`);
@@ -2179,8 +2405,34 @@
       }
     }
 
+    function renderDirectionToggle() {
+      const isReturn = state.direction === 'return';
+      if (els.dirOutboundBtn && els.dirReturnBtn) {
+        els.dirOutboundBtn.setAttribute('aria-pressed', String(!isReturn));
+        els.dirReturnBtn.setAttribute('aria-pressed', String(isReturn));
+        els.dirOutboundBtn.className = !isReturn
+          ? 'py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold transition text-center bg-white text-slate-900 shadow-sm whitespace-nowrap'
+          : 'py-2 px-2 rounded-lg text-[11px] sm:text-xs font-semibold transition text-center text-slate-600 hover:text-slate-900 whitespace-nowrap';
+        els.dirReturnBtn.className = isReturn
+          ? 'py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold transition text-center bg-slate-900 text-white shadow-sm whitespace-nowrap'
+          : 'py-2 px-2 rounded-lg text-[11px] sm:text-xs font-semibold transition text-center text-slate-600 hover:text-slate-900 whitespace-nowrap';
+      }
+      if (els.routeDirectionBadge) {
+        if (isReturn) {
+          els.routeDirectionBadge.textContent = 'Volta • Lugar → Hotel';
+          els.routeDirectionBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-200 border border-amber-300/40';
+        } else {
+          els.routeDirectionBadge.textContent = 'Ida • Hotel → Lugar';
+          els.routeDirectionBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-sky-500/20 text-sky-200 border border-sky-400/30';
+        }
+      }
+    }
+
     function renderRouteCard() {
       const route = state.currentRoute;
+      const isReturn = state.direction === 'return';
+      renderDirectionToggle();
+
       els.routeCategoryBadge.textContent = route.category || 'Destino SP';
       els.aiGeneratedBadge.classList.toggle('hidden', !state.isAiRoute);
       if (state.isAiRoute) {
@@ -2192,8 +2444,11 @@
           els.aiGeneratedBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
         }
       }
-      els.routeTitle.textContent = route.name;
-      els.routeSubtitle.textContent = `${route.neighborhood || 'São Paulo'} • Embarque via ${route.boardingStation}`;
+      const originLabel = !state.isCustomOrigin ? 'Hotel (DNA Vila Mariana)' : state.origin;
+      els.routeTitle.textContent = isReturn ? `Volta: ${route.name} → ${originLabel}` : route.name;
+      els.routeSubtitle.textContent = isReturn
+        ? `Saída de ${route.neighborhood || route.name} • Desembarque em ${route.boardingStation}`
+        : `${route.neighborhood || 'São Paulo'} • Embarque via ${route.boardingStation}`;
       els.routeTotalTime.textContent = `~${route.totalTimeMinutes} min`;
 
       // Line badges
@@ -2222,8 +2477,9 @@
       els.accessibilitySeals.innerHTML = seals.join('');
 
       // Step-by-Step Timeline
-      els.timelineStepsContainer.innerHTML = (route.steps || []).map((step, idx) => {
-        const isLast = idx === route.steps.length - 1;
+      const activeSteps = getStepsForDirection(route, isReturn);
+      els.timelineStepsContainer.innerHTML = activeSteps.map((step, idx) => {
+        const isLast = idx === activeSteps.length - 1;
         const lineStyle = step.lineCode ? LINE_STYLES[step.lineCode] : null;
         const nodeColor = lineStyle
           ? lineStyle.bg
@@ -2267,26 +2523,39 @@
       }).join('');
 
       // Google Maps, Uber & WhatsApp Action Links
-      const originEncoded = encodeURIComponent(state.origin);
+      const originSpec = getOriginLocationSpec();
+      const originMapsParam = encodeURIComponent(originSpec.address);
       const baseStationInfo = BASE_STATIONS[route.boardingStation];
       const stationQuery = encodeURIComponent(baseStationInfo ? baseStationInfo.mapsQuery : `${route.boardingStation} Metrô São Paulo`);
       const destAddress = route.mapsDestinationQuery || `${route.name}, São Paulo - SP`;
       const destQuery = encodeURIComponent(destAddress);
-      const mapsFullUrl = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${destQuery}&travelmode=transit`;
+      const destSpec = { address: destAddress, nickname: route.name, coords: null };
 
-      els.mapsWalkToStationBtn.href = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${stationQuery}&travelmode=walking`;
+      const mapsFullUrl = isReturn
+        ? `https://www.google.com/maps/dir/?api=1&origin=${destQuery}&destination=${originMapsParam}&travelmode=transit`
+        : `https://www.google.com/maps/dir/?api=1&origin=${originMapsParam}&destination=${destQuery}&travelmode=transit`;
+
+      els.mapsWalkToStationBtn.href = isReturn
+        ? `https://www.google.com/maps/dir/?api=1&origin=${stationQuery}&destination=${originMapsParam}&travelmode=walking`
+        : `https://www.google.com/maps/dir/?api=1&origin=${originMapsParam}&destination=${stationQuery}&travelmode=walking`;
       els.mapsFullRouteBtn.href = mapsFullUrl;
+
+      if (els.mapsWalkBtnLabel) {
+        els.mapsWalkBtnLabel.textContent = isReturn ? 'Da Estação até o Hotel (a pé)' : 'Caminhada até a Estação';
+      }
+      if (els.mapsFullRouteBtnLabel) {
+        els.mapsFullRouteBtnLabel.textContent = isReturn ? 'Rota de Volta no Google Maps' : 'Abrir Rota no Google Maps';
+      }
       if (els.routeUberBtn) {
         els.routeUberBtn.href = buildUberUrl({
-          pickupSpec: getOriginLocationSpec(),
-          dropoffSpec: {
-            address: destAddress,
-            nickname: route.name,
-            coords: null
-          }
+          pickupSpec: isReturn ? destSpec : originSpec,
+          dropoffSpec: isReturn ? originSpec : destSpec
         });
       }
-      els.whatsappShareBtn.href = buildWhatsAppShareUrl(route, mapsFullUrl);
+      if (els.routeUberBtnLabel) {
+        els.routeUberBtnLabel.textContent = isReturn ? 'Pedir Uber de Volta ao Hotel' : 'Pedir Uber até o Destino';
+      }
+      els.whatsappShareBtn.href = buildWhatsAppShareUrl(route, mapsFullUrl, isReturn);
 
       // Render Verdict Card
       renderVerdictCard(route);
@@ -2378,7 +2647,11 @@
       const route = state.currentRoute;
       const depTip = escapeHTML(route.customDepartureTip || '');
       const retTip = escapeHTML(route.customReturnTip || '');
-      els.destinationScheduleTipText.innerHTML = `<strong>Dica para ${escapeHTML(route.name)}:</strong> ${depTip} ${retTip}`;
+      if (state.direction === 'return') {
+        els.destinationScheduleTipText.innerHTML = `<strong>Dica de volta (${escapeHTML(route.name)} → Hotel):</strong> ${retTip} ${depTip}`;
+      } else {
+        els.destinationScheduleTipText.innerHTML = `<strong>Dica para ${escapeHTML(route.name)}:</strong> ${depTip} ${retTip}`;
+      }
 
       // Attach listeners to hour cells
       document.querySelectorAll('.hour-slot-btn').forEach((btn) => {
@@ -2456,6 +2729,27 @@
             durationMinutes: 8
           }
         ],
+        returnSteps: [
+          {
+            type: 'uber',
+            title: `Saída de ${queryText} até a estação de Metrô mais próxima`,
+            subtitle: 'Confira a estação mais perto em "Rota de Volta no Google Maps" ou faça o trecho inicial de Uber curto',
+            durationMinutes: 8
+          },
+          {
+            type: 'metro',
+            lineCode: 'L1-Azul',
+            title: 'Retorno pela Linha 1-Azul ou Linha 2-Verde (sentido Vila Mariana)',
+            subtitle: 'Siga em direção à Estação Ana Rosa para voltar à base',
+            durationMinutes: 14
+          },
+          {
+            type: 'walk',
+            title: 'Caminhada da Estação Ana Rosa até o Hotel (DNA Vila Mariana)',
+            subtitle: '900m (~13 min a pé via R. Vergueiro e R. Dr. Neto de Araújo)',
+            durationMinutes: 13
+          }
+        ],
         verdictWinner: 'hybrid',
         verdictTitle: 'Integração Metrô + Uber curto no destino final',
         verdictReason: `Saindo da Vila Mariana pelas Linhas 1-Azul ou 2-Verde você vence os principais gargalos de trânsito de SP e pode finalizar os últimos quilômetros até "${queryText}" com um Uber curto.`,
@@ -2497,9 +2791,22 @@ Use apenas estes códigos oficiais de linha em linesUsed e lineCode:
 "L1-Azul", "L2-Verde", "L3-Vermelha", "L4-Amarela", "L5-Lilás", "L9-Esmeralda", "L13-Jade", "L15-Prata".
 
 Calcule a rota mais inteligente e segura considerando que o usuário pode estar com crianças de 6 e 3 anos (tarifa Metrô SP 2026 = R$ 5,40; até 5 anos isento; 6+ paga inteira).
+Gere TANTO o passo a passo de IDA ("steps": saindo da origem até o destino) QUANTO o passo a passo de VOLTA ("returnSteps": saindo do destino de volta para o hotel "${state.origin}", invertendo corretamente os sentidos das linhas e terminando na "boardingStation").
 Seja geograficamente preciso sobre São Paulo, estações de desembarque, distância final e quando vale mais ir de Uber direto vs. Metrô vs. Metrô + Uber curto. Responda em Português do Brasil.`;
 
-      const userQuery = `Planeje o trajeto detalhado saindo de "${state.origin}" até o destino em São Paulo: "${queryText}".`;
+      const userQuery = `Planeje o trajeto detalhado de IDA e VOLTA entre "${state.origin}" e o destino em São Paulo: "${queryText}".`;
+
+      const stepItemSchema = {
+        type: 'OBJECT',
+        properties: {
+          type: { type: 'STRING', enum: ['walk', 'metro', 'transfer', 'uber'] },
+          lineCode: { type: 'STRING' },
+          title: { type: 'STRING' },
+          subtitle: { type: 'STRING' },
+          durationMinutes: { type: 'INTEGER' }
+        },
+        required: ['type', 'title', 'subtitle', 'durationMinutes']
+      };
 
       const payload = {
         contents: [{ role: 'user', parts: [{ text: userQuery }] }],
@@ -2525,17 +2832,11 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
               hasElevators: { type: 'BOOLEAN' },
               steps: {
                 type: 'ARRAY',
-                items: {
-                  type: 'OBJECT',
-                  properties: {
-                    type: { type: 'STRING', enum: ['walk', 'metro', 'transfer', 'uber'] },
-                    lineCode: { type: 'STRING' },
-                    title: { type: 'STRING' },
-                    subtitle: { type: 'STRING' },
-                    durationMinutes: { type: 'INTEGER' }
-                  },
-                  required: ['type', 'title', 'subtitle', 'durationMinutes']
-                }
+                items: stepItemSchema
+              },
+              returnSteps: {
+                type: 'ARRAY',
+                items: stepItemSchema
               },
               verdictWinner: { type: 'STRING', enum: ['metro', 'uber', 'hybrid'] },
               verdictTitle: { type: 'STRING' },
@@ -2548,7 +2849,7 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
             },
             required: [
               'name', 'neighborhood', 'category', 'totalTimeMinutes', 'boardingStation',
-              'linesUsed', 'hasPlatformDoors', 'hasElevators', 'steps',
+              'linesUsed', 'hasPlatformDoors', 'hasElevators', 'steps', 'returnSteps',
               'verdictWinner', 'verdictTitle', 'verdictReason',
               'uberDirectEstimateBRL', 'uberDirectMinutes',
               'customDepartureTip', 'customReturnTip', 'mapsDestinationQuery'
@@ -2856,6 +3157,20 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
           els.autocompleteDropdown.classList.add('hidden');
         }
       });
+
+      // Route direction toggle (Ida vs Volta ao Hotel)
+      const setDirection = (dir) => {
+        if (state.direction === dir) return;
+        state.direction = dir;
+        renderRouteCard();
+        renderScheduleBars();
+      };
+      if (els.dirOutboundBtn) {
+        els.dirOutboundBtn.addEventListener('click', () => setDirection('outbound'));
+      }
+      if (els.dirReturnBtn) {
+        els.dirReturnBtn.addEventListener('click', () => setDirection('return'));
+      }
 
       // Day type toggle
       els.btnWeekday.addEventListener('click', () => {
