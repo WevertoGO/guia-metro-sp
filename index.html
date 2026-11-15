@@ -388,17 +388,35 @@
             </div>
           </div>
 
-          <!-- Quick Access Chips -->
+          <!-- Quick Access Destinations Modal Trigger -->
           <div>
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Atalhos Rápidos (20 destinos SP)
+            <button
+              type="button"
+              id="openDestinationsModalBtn"
+              class="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/90 flex items-center justify-between gap-3 transition text-left active:scale-[0.995]"
+            >
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-lg bg-[#0455A1]/10 text-[#0455A1] flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                </span>
+                <div class="min-w-0">
+                  <span class="block text-xs font-extrabold text-slate-900">
+                    Destinos Rápidos (20 locais SP)
+                  </span>
+                  <span id="activeQuickDestLabel" class="block text-[11px] text-slate-500 truncate">
+                    Selecionado: Av. Paulista / MASP
+                  </span>
+                </div>
+              </div>
+              <span class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[11px] font-bold text-[#0455A1] shadow-sm">
+                <span>Escolher</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
               </span>
-              <span class="text-[11px] text-slate-400">Deslize &rarr;</span>
-            </div>
-            <div id="quickChipsContainer" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-              <!-- Populated dynamically via JS -->
-            </div>
+            </button>
           </div>
         </section>
 
@@ -549,7 +567,7 @@
         </div>
 
         <!-- 4. ROTEIRO PASSO A PASSO CARD -->
-        <section id="routeResultCard" class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden" aria-label="Roteiro Sugerido">
+        <section id="routeResultCard" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden" aria-label="Roteiro Sugerido">
           <!-- Route Header -->
           <div class="p-4 sm:p-5 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
             <div class="flex items-start justify-between gap-3">
@@ -609,6 +627,16 @@
               >
                 Volta: Lugar → Hotel
               </button>
+            </div>
+
+            <!-- Practical Metro Return Guide (visible when Volta is selected) -->
+            <div id="metroReturnGuideBox" class="hidden mb-4 p-3 rounded-xl bg-amber-50/90 border border-amber-200/90 text-xs text-amber-950 flex items-start gap-2.5">
+              <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              <p class="leading-relaxed">
+                <strong>Como voltar de metrô:</strong> entre na mesma estação, passe na catraca, vá para a <strong>plataforma oposta</strong> (outro lado dos trilhos) e siga a placa <strong>"Sentido..."</strong> indicada abaixo. Baldeações internas são gratuitas.
+              </p>
             </div>
 
             <div id="timelineStepsContainer" class="space-y-0">
@@ -916,6 +944,66 @@
             Salvar Chave
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Destinos Rápidos (20 locais em SP) -->
+  <div
+    id="destinationsModal"
+    class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="destinationsModalTitle"
+  >
+    <div class="w-full max-w-lg max-h-[85vh] bg-white rounded-t-3xl sm:rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-100 space-y-3 shrink-0">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#0455A1] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h2 id="destinationsModalTitle" class="text-sm font-extrabold text-slate-900 truncate">
+                Destinos Rápidos em São Paulo
+              </h2>
+              <p class="text-[11px] text-slate-500">
+                20 roteiros prontos (ida e volta pela Vila Mariana)
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="closeDestinationsModalBtn"
+            aria-label="Fechar destinos rápidos"
+            class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition shrink-0"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="relative">
+          <input
+            type="text"
+            id="modalDestFilterInput"
+            autocomplete="off"
+            placeholder="Filtrar por nome, bairro ou linha (ex: Parque, Paulista, L1)..."
+            class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+          />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path stroke-linecap="round" d="M20 20l-3.5-3.5" />
+          </svg>
+        </div>
+      </div>
+
+      <div id="destinationsModalList" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2">
+        <!-- Populated dynamically via JS -->
       </div>
     </div>
   </div>
@@ -1789,7 +1877,12 @@
       recentSearchesSection: document.getElementById('recentSearchesSection'),
       recentSearchesContainer: document.getElementById('recentSearchesContainer'),
       clearRecentBtn: document.getElementById('clearRecentBtn'),
-      quickChipsContainer: document.getElementById('quickChipsContainer'),
+      openDestinationsModalBtn: document.getElementById('openDestinationsModalBtn'),
+      activeQuickDestLabel: document.getElementById('activeQuickDestLabel'),
+      destinationsModal: document.getElementById('destinationsModal'),
+      closeDestinationsModalBtn: document.getElementById('closeDestinationsModalBtn'),
+      modalDestFilterInput: document.getElementById('modalDestFilterInput'),
+      destinationsModalList: document.getElementById('destinationsModalList'),
       btnWeekday: document.getElementById('btnWeekday'),
       btnWeekend: document.getElementById('btnWeekend'),
       autoDayBadge: document.getElementById('autoDayBadge'),
@@ -1815,6 +1908,7 @@
       accessibilitySeals: document.getElementById('accessibilitySeals'),
       dirOutboundBtn: document.getElementById('dirOutboundBtn'),
       dirReturnBtn: document.getElementById('dirReturnBtn'),
+      metroReturnGuideBox: document.getElementById('metroReturnGuideBox'),
       timelineStepsContainer: document.getElementById('timelineStepsContainer'),
       mapsWalkToStationBtn: document.getElementById('mapsWalkToStationBtn'),
       mapsWalkBtnLabel: document.getElementById('mapsWalkBtnLabel'),
@@ -2320,37 +2414,105 @@
       });
     }
 
-    function renderQuickChips() {
-      els.quickChipsContainer.innerHTML = DESTINATIONS_DB.map((dest) => {
+    function renderDestinationsSelector() {
+      if (!els.activeQuickDestLabel) return;
+      if (!state.isAiRoute && state.currentRoute) {
+        els.activeQuickDestLabel.textContent = `Ativo: ${state.currentRoute.chipLabel || state.currentRoute.name}`;
+      } else {
+        els.activeQuickDestLabel.textContent = 'Toque para explorar os 20 roteiros prontos';
+      }
+    }
+
+    function openDestinationsModal() {
+      if (!els.destinationsModal) return;
+      if (els.modalDestFilterInput) {
+        els.modalDestFilterInput.value = '';
+      }
+      renderDestinationsModalList('');
+      els.destinationsModal.classList.remove('hidden');
+      if (els.modalDestFilterInput) {
+        setTimeout(() => els.modalDestFilterInput.focus(), 50);
+      }
+    }
+
+    function closeDestinationsModal() {
+      if (!els.destinationsModal) return;
+      els.destinationsModal.classList.add('hidden');
+    }
+
+    function renderDestinationsModalList(filterText = '') {
+      if (!els.destinationsModalList) return;
+      const query = filterText.trim().toLowerCase();
+      const filtered = query
+        ? DESTINATIONS_DB.filter((d) =>
+            d.name.toLowerCase().includes(query) ||
+            d.chipLabel.toLowerCase().includes(query) ||
+            d.neighborhood.toLowerCase().includes(query) ||
+            d.category.toLowerCase().includes(query) ||
+            d.boardingStation.toLowerCase().includes(query) ||
+            d.linesUsed.some((l) => l.toLowerCase().includes(query))
+          )
+        : DESTINATIONS_DB;
+
+      if (filtered.length === 0) {
+        els.destinationsModalList.innerHTML = `
+          <div class="p-6 text-center text-xs text-slate-500">
+            <p class="font-semibold text-slate-700">Nenhum destino rápido encontrado.</p>
+            <p class="mt-1">Feche e use a busca principal para traçar qualquer endereço.</p>
+          </div>
+        `;
+        return;
+      }
+
+      els.destinationsModalList.innerHTML = filtered.map((dest) => {
         const isActive = !state.isAiRoute && state.currentRoute.id === dest.id;
-        const primaryLine = dest.linesUsed[0];
-        const dotColor = LINE_STYLES[primaryLine]?.bg || '#0455A1';
-        const activeClasses = isActive
-          ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-          : 'bg-slate-50 text-slate-700 border-slate-200/90 hover:bg-slate-100';
+        const linePills = dest.linesUsed.map((l) => createLineBadgeHTML(l, true)).join(' ');
+        const cardStyle = isActive
+          ? 'bg-blue-50/80 border-[#0455A1] ring-1 ring-[#0455A1]/30'
+          : 'bg-white border-slate-200 hover:bg-slate-50';
         return `
           <button
             type="button"
             data-dest-id="${dest.id}"
-            class="quick-chip shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition ${activeClasses}"
+            class="modal-dest-item w-full text-left p-3.5 rounded-2xl border transition flex items-start justify-between gap-3 ${cardStyle}"
           >
-            <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${dotColor};"></span>
-            <span>${escapeHTML(dest.chipLabel)}</span>
+            <div class="min-w-0 space-y-1.5">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${linePills}
+                <span class="text-[10px] font-semibold text-slate-500">${escapeHTML(dest.category)}</span>
+              </div>
+              <p class="text-sm font-extrabold text-slate-900 leading-snug">
+                ${escapeHTML(dest.name)}
+              </p>
+              <p class="text-[11px] text-slate-500">
+                ${escapeHTML(dest.neighborhood)} • Via ${escapeHTML(dest.boardingStation)}
+              </p>
+            </div>
+            <div class="shrink-0 flex flex-col items-end gap-1.5">
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold tabular-nums">
+                ~${dest.totalTimeMinutes} min
+              </span>
+              ${isActive ? '<span class="text-[10px] font-bold text-[#0455A1]">Selecionado</span>' : ''}
+            </div>
           </button>
         `;
       }).join('');
 
-      document.querySelectorAll('.quick-chip').forEach((btn) => {
+      document.querySelectorAll('.modal-dest-item').forEach((btn) => {
         btn.addEventListener('click', () => {
           const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.destId);
-          if (found) {
-            state.currentRoute = found;
-            state.isAiRoute = false;
-            state.isOfflineFallback = false;
-            els.destinationInput.value = found.name;
-            els.clearSearchBtn.classList.remove('hidden');
-            els.autocompleteDropdown.classList.add('hidden');
-            renderAll();
+          if (!found) return;
+          state.currentRoute = found;
+          state.isAiRoute = false;
+          state.isOfflineFallback = false;
+          els.destinationInput.value = found.name;
+          els.clearSearchBtn.classList.remove('hidden');
+          els.autocompleteDropdown.classList.add('hidden');
+          recordRecentSearch({ type: 'local', id: found.id, label: found.name });
+          closeDestinationsModal();
+          renderAll();
+          if (els.routeResultCard) {
+            els.routeResultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
         });
       });
@@ -2425,6 +2587,9 @@
           els.routeDirectionBadge.textContent = 'Ida • Hotel → Lugar';
           els.routeDirectionBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-sky-500/20 text-sky-200 border border-sky-400/30';
         }
+      }
+      if (els.metroReturnGuideBox) {
+        els.metroReturnGuideBox.classList.toggle('hidden', !isReturn);
       }
     }
 
@@ -2666,7 +2831,7 @@
     function renderAll() {
       renderAiKeyStatus();
       renderRecentSearches();
-      renderQuickChips();
+      renderDestinationsSelector();
       renderDayToggle();
       renderFamilyControls();
       renderRouteCard();
@@ -3007,7 +3172,7 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       els.autocompleteDropdown.classList.add('hidden');
 
       if (!raw) {
-        showToast('Digite um destino ou toque em um atalho rápido');
+        showToast('Digite um destino ou escolha em Destinos Rápidos');
         els.destinationInput.focus();
         return;
       }
@@ -3033,6 +3198,26 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
     // 10. EVENT LISTENERS & INITIALIZATION
     // =========================================================================
     function bindEvents() {
+      // Quick Destinations Modal
+      if (els.openDestinationsModalBtn) {
+        els.openDestinationsModalBtn.addEventListener('click', openDestinationsModal);
+      }
+      if (els.closeDestinationsModalBtn) {
+        els.closeDestinationsModalBtn.addEventListener('click', closeDestinationsModal);
+      }
+      if (els.destinationsModal) {
+        els.destinationsModal.addEventListener('click', (e) => {
+          if (e.target === els.destinationsModal) {
+            closeDestinationsModal();
+          }
+        });
+      }
+      if (els.modalDestFilterInput) {
+        els.modalDestFilterInput.addEventListener('input', (e) => {
+          renderDestinationsModalList(e.target.value);
+        });
+      }
+
       // AI Settings Modal
       els.openAiSettingsBtn.addEventListener('click', openAiModal);
       els.closeAiModalBtn.addEventListener('click', closeAiModal);
@@ -3044,8 +3229,12 @@ Seja geograficamente preciso sobre São Paulo, estações de desembarque, distâ
       });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !els.aiSettingsModal.classList.contains('hidden')) {
+        if (e.key !== 'Escape') return;
+        if (!els.aiSettingsModal.classList.contains('hidden')) {
           closeAiModal();
+        }
+        if (els.destinationsModal && !els.destinationsModal.classList.contains('hidden')) {
+          closeDestinationsModal();
         }
       });
 
