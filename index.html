@@ -1,0 +1,2777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Guia Metrô &amp; Mobilidade SP — Base Vila Mariana</title>
+
+  <!-- PWA / App Nativo (iOS & Android) -->
+  <meta name="theme-color" content="#0455A1" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Metrô SP" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Metrô SP" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230455A1'/%3E%3Cstop offset='50%25' stop-color='%23007E5E'/%3E%3Cstop offset='100%25' stop-color='%239B3894'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Crect x='136' y='96' width='240' height='264' rx='52' fill='none' stroke='%23FFFFFF' stroke-width='28'/%3E%3Cpath d='M136 224h240M184 360l-36 56M328 360l36 56' fill='none' stroke='%23FFFFFF' stroke-width='28' stroke-linecap='round'/%3E%3Ccircle cx='196' cy='296' r='16' fill='%23FFFFFF'/%3E%3Ccircle cx='316' cy='296' r='16' fill='%23FFFFFF'/%3E%3C/svg%3E"
+  />
+  <link
+    rel="apple-touch-icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230455A1'/%3E%3Cstop offset='50%25' stop-color='%23007E5E'/%3E%3Cstop offset='100%25' stop-color='%239B3894'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Crect x='136' y='96' width='240' height='264' rx='52' fill='none' stroke='%23FFFFFF' stroke-width='28'/%3E%3Cpath d='M136 224h240M184 360l-36 56M328 360l36 56' fill='none' stroke='%23FFFFFF' stroke-width='28' stroke-linecap='round'/%3E%3Ccircle cx='196' cy='296' r='16' fill='%23FFFFFF'/%3E%3Ccircle cx='316' cy='296' r='16' fill='%23FFFFFF'/%3E%3C/svg%3E"
+  />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            metro: {
+              azul: '#0455A1',
+              verde: '#007E5E',
+              vermelha: '#EE372F',
+              amarela: '#F5C400',
+              lilas: '#9B3894',
+              esmeralda: '#00A88F',
+              jade: '#00AB5B',
+              prata: '#858D90',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Custom scrollbar for horizontal quick chips */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Smooth subtle pulse for live hour indicator */
+    @keyframes softPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.15); }
+    }
+    .live-dot {
+      animation: softPulse 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- Top App Bar -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80" style="padding-top: env(safe-area-inset-top);">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-3 min-w-0">
+        <!-- App Logo Icon (Inline SVG) -->
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#0455A1] via-[#007E5E] to-[#9B3894] flex items-center justify-center text-white shadow-sm shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5" y="3" width="14" height="15" rx="3" />
+            <path d="M5 10h14M9 14h.01M15 14h.01M8 18l-2 3M16 18l2 3" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-slate-900 truncate">
+            Guia Metrô &amp; Mobilidade SP
+          </h1>
+          <p class="text-xs text-slate-500 font-medium truncate">
+            Base Vila Mariana • Planejador Inteligente
+          </p>
+        </div>
+      </div>
+
+      <!-- Current Live Time & AI Settings Button -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span id="liveStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+          <span id="liveClockText">--:--</span>
+        </span>
+        <button
+          type="button"
+          id="openAiSettingsBtn"
+          aria-label="Configurar IA"
+          title="Configurar IA (Chave Gemini)"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200/80 text-slate-700 border border-slate-200/90 transition"
+        >
+          <span id="aiKeyHeaderDot" class="w-2 h-2 rounded-full bg-slate-400 shrink-0"></span>
+          <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span class="hidden sm:inline">Configurar IA</span>
+          <span class="sm:hidden">IA</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main class="max-w-5xl mx-auto px-4 py-4 sm:py-6 pb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+      <!-- LEFT COLUMN: Origin, Destination Search, Context Controls -->
+      <div class="lg:col-span-5 space-y-4">
+
+        <!-- 1. ORIGEM FIXA CARD -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4" aria-label="Ponto de Origem">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="mt-0.5 w-8 h-8 rounded-xl bg-blue-50 text-[#0455A1] flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-6-5.33-6-10a6 6 0 1112 0c0 4.67-6 10-6 10z" />
+                  <circle cx="12" cy="11" r="2.2" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-[#0455A1]">Origem Fixa</span>
+                  <span id="customOriginTag" class="hidden text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Editada</span>
+                </div>
+                <p id="originDisplayText" class="text-sm font-bold text-slate-900 leading-snug mt-0.5">
+                  Condomínio DNA Vila Mariana (R. Dr. Neto de Araújo, 265 - Vila Mariana, SP)
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="toggleEditOriginBtn"
+              class="shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition"
+              title="Editar endereço de origem"
+            >
+              Editar
+            </button>
+          </div>
+
+          <!-- Discrete Collapsible Origin Editor -->
+          <div id="originEditorBox" class="hidden mt-3 pt-3 border-t border-slate-100 space-y-2.5">
+            <label for="originInput" class="block text-xs font-semibold text-slate-600">
+              Alterar ponto de partida em São Paulo:
+            </label>
+            <input
+              type="text"
+              id="originInput"
+              value="Condomínio DNA Vila Mariana (R. Dr. Neto de Araújo, 265 - Vila Mariana, SP)"
+              class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+              placeholder="Digite endereço ou ponto de referência..."
+            />
+            <div class="flex items-center justify-between gap-2">
+              <button
+                type="button"
+                id="resetOriginBtn"
+                class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition"
+              >
+                Restaurar DNA Vila Mariana
+              </button>
+              <button
+                type="button"
+                id="saveOriginBtn"
+                class="px-4 py-2 rounded-xl text-xs font-bold bg-[#0455A1] text-white hover:bg-blue-800 transition"
+              >
+                Salvar Origem
+              </button>
+            </div>
+          </div>
+
+          <!-- Mapped Base Stations Accordion / Summary -->
+          <div class="mt-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              id="toggleBaseStationsBtn"
+              class="w-full flex items-center justify-between text-left text-xs font-semibold text-slate-600 hover:text-slate-900 py-1"
+            >
+              <span class="flex items-center gap-1.5">
+                <span class="inline-block w-2 h-2 rounded-full bg-[#0455A1]"></span>
+                <span class="inline-block w-2 h-2 rounded-full bg-[#007E5E]"></span>
+                <span class="inline-block w-2 h-2 rounded-full bg-[#9B3894]"></span>
+                <span>3 Estações Base a pé (600m – 900m)</span>
+              </span>
+              <svg id="baseStationsChevron" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <div id="baseStationsList" class="hidden mt-2.5 space-y-2">
+              <!-- Station 1 -->
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-[#0455A1]">L1-Azul</span>
+                    <span class="text-xs font-bold text-slate-900">Estação Vila Mariana</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mt-0.5">600m (~9 min a pé via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos)</p>
+                </div>
+                <a
+                  id="baseStationLinkVilaMariana"
+                  href="https://www.google.com/maps/dir/?api=1&origin=Condom%C3%ADnio+DNA+Vila+Mariana,+R.+Dr.+Neto+de+Ara%C3%BAjo,+265&destination=Esta%C3%A7%C3%A3o+Vila+Mariana+Metr%C3%B4+SP&travelmode=walking"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="shrink-0 p-2 rounded-xl bg-white border border-slate-200 text-[#0455A1] hover:bg-blue-50 transition"
+                  title="Ver caminhada no Maps"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Station 2 -->
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-[#007E5E]">L2-Verde</span>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-[#9B3894]">L5-Lilás</span>
+                    <span class="text-xs font-bold text-slate-900">Estação Chácara Klabin</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mt-0.5">900m (~11 min a pé via R. Vergueiro)</p>
+                </div>
+                <a
+                  id="baseStationLinkChacaraKlabin"
+                  href="https://www.google.com/maps/dir/?api=1&origin=Condom%C3%ADnio+DNA+Vila+Mariana,+R.+Dr.+Neto+de+Ara%C3%BAjo,+265&destination=Esta%C3%A7%C3%A3o+Ch%C3%A1cara+Klabin+Metr%C3%B4+SP&travelmode=walking"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="shrink-0 p-2 rounded-xl bg-white border border-slate-200 text-[#007E5E] hover:bg-emerald-50 transition"
+                  title="Ver caminhada no Maps"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Station 3 -->
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-[#0455A1]">L1-Azul</span>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-[#007E5E]">L2-Verde</span>
+                    <span class="text-xs font-bold text-slate-900">Estação Ana Rosa</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mt-0.5">900m (~13 min a pé via R. Dr. Neto de Araújo e R. Vergueiro)</p>
+                </div>
+                <a
+                  id="baseStationLinkAnaRosa"
+                  href="https://www.google.com/maps/dir/?api=1&origin=Condom%C3%ADnio+DNA+Vila+Mariana,+R.+Dr.+Neto+de+Ara%C3%BAjo,+265&destination=Esta%C3%A7%C3%A3o+Ana+Rosa+Metr%C3%B4+SP&travelmode=walking"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="shrink-0 p-2 rounded-xl bg-white border border-slate-200 text-[#0455A1] hover:bg-blue-50 transition"
+                  title="Ver caminhada no Maps"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. BUSCA DE DESTINO + BUSCAS RECENTES + ATALHOS RÁPIDOS -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 space-y-3.5" aria-label="Busca de Destino">
+          <div>
+            <label for="destinationInput" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+              Para onde você vai em São Paulo?
+            </label>
+            <div class="relative">
+              <div class="flex gap-2">
+                <div class="relative flex-1">
+                  <input
+                    type="text"
+                    id="destinationInput"
+                    autocomplete="off"
+                    placeholder="Ex: Av. Paulista, Aquário, Restaurante, Museu..."
+                    class="w-full pl-9 pr-8 py-3 text-sm font-medium rounded-xl border border-slate-300 bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1] transition"
+                  />
+                  <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7" />
+                    <path stroke-linecap="round" d="M20 20l-3.5-3.5" />
+                  </svg>
+                  <button
+                    type="button"
+                    id="clearSearchBtn"
+                    class="hidden absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
+                    title="Limpar busca"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  id="planRouteBtn"
+                  class="px-4 py-3 rounded-xl text-sm font-bold bg-[#0455A1] text-white hover:bg-blue-800 active:scale-[0.99] transition shadow-sm shrink-0 flex items-center gap-1.5"
+                >
+                  <span>Planejar</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Autocomplete Dropdown -->
+              <div
+                id="autocompleteDropdown"
+                class="hidden absolute left-0 right-0 mt-1.5 bg-white rounded-2xl border border-slate-200 shadow-xl z-20 max-h-72 overflow-y-auto divide-y divide-slate-100"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Recent Searches Shortcuts (max 5 from localStorage) -->
+          <div id="recentSearchesSection" class="hidden pt-1">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Buscas Recentes
+              </span>
+              <button
+                type="button"
+                id="clearRecentBtn"
+                class="text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition"
+              >
+                Limpar
+              </button>
+            </div>
+            <div id="recentSearchesContainer" class="flex flex-wrap gap-1.5">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Quick Access Chips -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                Atalhos Rápidos (20 destinos SP)
+              </span>
+              <span class="text-[11px] text-slate-400">Deslize &rarr;</span>
+            </div>
+            <div id="quickChipsContainer" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. CONTROLES DE CONTEXTO (DIA E PERFIL FAMÍLIA) -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 space-y-4" aria-label="Contexto da Viagem">
+          <!-- Day Type Selector -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Dia do Deslocamento</span>
+              <span id="autoDayBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#0455A1]">
+                Detectado hoje
+              </span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl">
+              <button
+                type="button"
+                id="btnWeekday"
+                class="py-2.5 px-3 rounded-lg text-xs font-bold transition text-center"
+              >
+                Dia Útil (Seg–Sex)
+              </button>
+              <button
+                type="button"
+                id="btnWeekend"
+                class="py-2.5 px-3 rounded-lg text-xs font-bold transition text-center"
+              >
+                Fim de Semana / Feriado
+              </button>
+            </div>
+          </div>
+
+          <!-- Family Mode Toggle & Fare Calculator (2026) -->
+          <div class="pt-3 border-t border-slate-100">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-slate-900">Modo Família</p>
+                  <p class="text-xs text-slate-500">Crianças de 6 e 3 anos • Tarifa SP 2026</p>
+                </div>
+              </div>
+              <!-- Switch -->
+              <button
+                type="button"
+                id="familyModeToggle"
+                role="switch"
+                aria-checked="true"
+                class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#007E5E] transition-colors duration-200 ease-in-out focus:outline-none"
+              >
+                <span
+                  id="familyModeKnob"
+                  class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"
+                ></span>
+              </button>
+            </div>
+
+            <!-- Family Passenger & Fare Breakdown Panel -->
+            <div id="familyDetailsPanel" class="mt-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-semibold text-slate-700">Tarifa Unitária Metrô SP (2026)</span>
+                <span class="font-extrabold text-slate-900 tabular-nums">R$ 5,40</span>
+              </div>
+
+              <!-- Passenger Steppers -->
+              <div class="space-y-2">
+                <!-- Adults -->
+                <div class="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-slate-200/70">
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Adultos</p>
+                    <p class="text-[11px] text-slate-500">Tarifa inteira (R$ 5,40)</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" data-role="adults" data-delta="-1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">-</button>
+                    <span id="countAdults" class="w-5 text-center text-sm font-extrabold tabular-nums">2</span>
+                    <button type="button" data-role="adults" data-delta="1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">+</button>
+                  </div>
+                </div>
+
+                <!-- Child 6+ -->
+                <div class="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-slate-200/70">
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Criança (6+ anos)</p>
+                    <p class="text-[11px] text-slate-500">Paga tarifa inteira (R$ 5,40)</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" data-role="child6" data-delta="-1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">-</button>
+                    <span id="countChild6" class="w-5 text-center text-sm font-extrabold tabular-nums">1</span>
+                    <button type="button" data-role="child6" data-delta="1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">+</button>
+                  </div>
+                </div>
+
+                <!-- Child 0-5 -->
+                <div class="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-emerald-200/80">
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Criança (até 5 anos, ex: 3 anos)</p>
+                    <p class="text-[11px] font-semibold text-emerald-700">Isenta de tarifa (R$ 0,00)</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" data-role="child3" data-delta="-1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">-</button>
+                    <span id="countChild3" class="w-5 text-center text-sm font-extrabold tabular-nums">1</span>
+                    <button type="button" data-role="child3" data-delta="1" class="stepper-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Calculated Fare Summary -->
+              <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                <div>
+                  <p class="text-[11px] font-semibold text-slate-500">Total Metrô (<span id="payingCountText">3 pagantes + 1 isenta</span>)</p>
+                  <p class="text-xs text-slate-500">Ida e volta: <strong id="fareRoundTripText" class="text-slate-800 tabular-nums">R$ 32,40</strong></p>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Só Ida</span>
+                  <span id="fareOneWayText" class="text-lg font-extrabold text-[#0455A1] tabular-nums">R$ 16,20</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Single Adult Fare Summary (when Family Mode is toggled OFF) -->
+            <div id="singleFareSummary" class="hidden mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-600">Tarifa Individual Metrô SP (2026)</span>
+              <span class="font-extrabold text-[#0455A1] tabular-nums">R$ 5,40 (Ida) • R$ 10,80 (Ida/Volta)</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Route Timeline, Family Verdict, Time Windows -->
+      <div class="lg:col-span-7 space-y-4">
+
+        <!-- Loading State (Visible during AI custom route calculation) -->
+        <div id="aiLoadingCard" class="hidden bg-white rounded-2xl border border-blue-200 shadow-sm p-6 text-center space-y-3">
+          <div class="w-11 h-11 mx-auto rounded-2xl bg-blue-50 text-[#0455A1] flex items-center justify-center">
+            <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Traçando melhor rota na malha de SP...</h3>
+            <p class="text-xs text-slate-500 mt-1">Analisando estações da Vila Mariana, baldeações, acessibilidade e horário ideal.</p>
+          </div>
+        </div>
+
+        <!-- 4. ROTEIRO PASSO A PASSO CARD -->
+        <section id="routeResultCard" class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden" aria-label="Roteiro Sugerido">
+          <!-- Route Header -->
+          <div class="p-4 sm:p-5 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span id="routeCategoryBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/15 text-blue-200">
+                    Cultura &amp; Lazer
+                  </span>
+                  <span id="aiGeneratedBadge" class="hidden px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                    Rota IA Personalizada
+                  </span>
+                </div>
+                <h2 id="routeTitle" class="text-lg sm:text-xl font-extrabold tracking-tight mt-1.5 leading-snug">
+                  Av. Paulista / MASP
+                </h2>
+                <p id="routeSubtitle" class="text-xs text-slate-300 mt-0.5">
+                  Bela Vista / Cerqueira César • Embarque via Estação Chácara Klabin
+                </p>
+              </div>
+              <div class="text-right shrink-0 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10">
+                <span class="block text-[10px] font-semibold uppercase tracking-wider text-slate-300">Tempo Est.</span>
+                <span id="routeTotalTime" class="text-lg font-extrabold text-white tabular-nums">~24 min</span>
+              </div>
+            </div>
+
+            <!-- Line Badges + Accessibility Seals -->
+            <div class="mt-3.5 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+              <div id="routeLinesBadges" class="flex items-center gap-1.5 flex-wrap">
+                <!-- Populated dynamically -->
+              </div>
+              <div id="accessibilitySeals" class="flex items-center gap-1.5 flex-wrap">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual Step-by-Step Timeline -->
+          <div class="p-4 sm:p-5">
+            <div id="timelineStepsContainer" class="space-y-0">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- Route Actions: Google Maps + WhatsApp Share -->
+            <div class="mt-5 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <a
+                id="mapsWalkToStationBtn"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-slate-100 text-slate-800 hover:bg-slate-200/80 transition"
+              >
+                <svg class="w-4 h-4 text-[#0455A1]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 4a2 2 0 100 4 2 2 0 000-4zm-2 7l-2 9m2-9l3 3 2 6m-5-9l-3 2v3" />
+                </svg>
+                <span>Caminhada até a Estação</span>
+              </a>
+              <a
+                id="mapsFullRouteBtn"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-[#0455A1] text-white hover:bg-blue-800 transition shadow-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                <span>Abrir Rota no Google Maps</span>
+              </a>
+              <a
+                id="whatsappShareBtn"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="sm:col-span-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold bg-[#007E5E] text-white hover:bg-emerald-800 transition shadow-sm"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.531.078-1.203.109-1.938-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.328-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.609-.391.813-.391.203 0 .406.016.578.016.188 0 .438-.078.688.516.25.609.859 2.094.938 2.25.078.156.125.344.031.547-.094.203-.141.328-.281.5-.141.172-.297.391-.422.516-.141.141-.297.297-.125.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.453.297.141.469.125.641-.078.172-.203.75-.875.953-1.172.203-.297.406-.25.672-.141.266.109 1.703.797 2 .953.297.156.484.219.563.344.078.125.078.719-.172 1.422z" />
+                </svg>
+                <span>Enviar Roteiro no WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- VEREDITO SINCERO: METRÔ VS. UBER (FAMILY / COMFORT COMPARISON) -->
+        <section id="verdictCard" class="rounded-2xl border p-4 sm:p-5 shadow-sm transition-colors" aria-label="Veredito Metrô vs. Uber">
+          <div class="flex items-start gap-3">
+            <div id="verdictIconBox" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+              <!-- Icon set via JS -->
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span id="verdictTag" class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                  Veredito Mobilidade
+                </span>
+                <span id="uberEstimateBadge" class="text-xs font-bold text-slate-700 bg-white/80 px-2.5 py-1 rounded-lg border border-slate-200/80 tabular-nums">
+                  Uber direto: ~R$ 22–28 (~18 min)
+                </span>
+              </div>
+              <h3 id="verdictTitle" class="text-sm sm:text-base font-extrabold text-slate-900 mt-1.5">
+                Metrô é a melhor escolha para este trajeto
+              </h3>
+              <p id="verdictReason" class="text-xs sm:text-sm text-slate-700 leading-relaxed mt-1">
+                Explicação detalhada do comparativo...
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. MELHORES HORÁRIOS (IDA E VOLTA) 05H ÀS 00H -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5 space-y-4" aria-label="Melhores Horários">
+          <div class="flex items-start justify-between gap-2 flex-wrap">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">Melhores Horários (Ida e Volta)</h3>
+              <p id="scheduleContextSubtitle" class="text-xs text-slate-500 mt-0.5">
+                Faixas horárias das 05h às 00h • Base Vila Mariana
+              </p>
+            </div>
+            <!-- Legend -->
+            <div class="flex items-center gap-2.5 text-[11px] font-semibold">
+              <span class="flex items-center gap-1 text-emerald-700">
+                <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span>Tranquilo
+              </span>
+              <span class="flex items-center gap-1 text-amber-700">
+                <span class="w-2.5 h-2.5 rounded-sm bg-amber-400"></span>Moderado
+              </span>
+              <span class="flex items-center gap-1 text-rose-700">
+                <span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span>Pico / Evitar
+              </span>
+            </div>
+          </div>
+
+          <!-- Recommended Departure & Return Summary Boxes -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">
+                Melhor Janela de Ida
+              </span>
+              <p id="bestDepartureWindow" class="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
+                09h30 às 11h30 ou 14h00 às 16h00
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-blue-50/70 border border-blue-200/80">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#0455A1] block">
+                Melhor Janela de Volta
+              </span>
+              <p id="bestReturnWindow" class="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
+                14h00 às 16h30 ou após 20h00
+              </p>
+            </div>
+          </div>
+
+          <!-- Visual Bar 1: METRÔ SP (05h - 00h) -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#0455A1]"></span>
+                Metrô SP (Lotação &amp; Conforto)
+              </span>
+              <span class="text-[11px] text-slate-400">Toque na hora para detalhes</span>
+            </div>
+            <div id="metroHoursBar" class="grid grid-cols-10 sm:grid-cols-20 gap-1" style="grid-template-columns: repeat(20, minmax(0, 1fr));">
+              <!-- 20 hour slots (05h to 00h) rendered by JS -->
+            </div>
+            <div class="flex justify-between text-[10px] font-semibold text-slate-400 tabular-nums px-0.5">
+              <span>05h</span>
+              <span>08h</span>
+              <span>11h</span>
+              <span>14h</span>
+              <span>17h</span>
+              <span>20h</span>
+              <span>00h</span>
+            </div>
+          </div>
+
+          <!-- Visual Bar 2: UBER / TRÂNSITO LOCAL (05h - 00h) -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-slate-800"></span>
+                Uber / Carro (Trânsito &amp; Tarifa Dinâmica)
+              </span>
+              <span class="text-[11px] text-slate-400">23 de Maio / Vergueiro</span>
+            </div>
+            <div id="uberHoursBar" class="grid gap-1" style="grid-template-columns: repeat(20, minmax(0, 1fr));">
+              <!-- 20 hour slots (05h to 00h) rendered by JS -->
+            </div>
+            <div class="flex justify-between text-[10px] font-semibold text-slate-400 tabular-nums px-0.5">
+              <span>05h</span>
+              <span>08h</span>
+              <span>11h</span>
+              <span>14h</span>
+              <span>17h</span>
+              <span>20h</span>
+              <span>00h</span>
+            </div>
+          </div>
+
+          <!-- Interactive Selected Hour Callout -->
+          <div id="hourInspectorBox" class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 flex items-start gap-2.5">
+            <span id="hourInspectorBadge" class="px-2 py-0.5 rounded font-bold text-[11px] bg-emerald-100 text-emerald-800 shrink-0 tabular-nums">
+              10h
+            </span>
+            <p id="hourInspectorText" class="leading-relaxed">
+              Toque em qualquer faixa horária acima (05h–00h) para ver a recomendação específica de embarque e trânsito.
+            </p>
+          </div>
+
+          <!-- Destination-specific schedule note -->
+          <div id="destinationScheduleTipBox" class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2">
+            <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path stroke-linecap="round" d="M12 8v4l2.5 2.5" />
+            </svg>
+            <p id="destinationScheduleTipText" class="leading-relaxed"></p>
+          </div>
+
+          <!-- Official Operating Hours & Saturday 24h Notice -->
+          <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+            <p>
+              <strong class="text-slate-700">Funcionamento padrão:</strong> Todos os dias das <strong>04h40 à 00h00</strong>.
+            </p>
+            <p>
+              <strong class="text-[#0455A1]">Operação 24h aos sábados:</strong> Na madrugada de sábado para domingo, as <strong>Linhas 1-Azul, 2-Verde, 3-Vermelha e 15-Prata</strong> operam continuamente (com intervalos maiores na madrugada).
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Configurar Chave Gemini API -->
+  <div
+    id="aiSettingsModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="aiModalTitle"
+  >
+    <div class="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#0455A1] flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
+          </div>
+          <div>
+            <h2 id="aiModalTitle" class="text-sm font-extrabold text-slate-900">Configurar IA (Google Gemini)</h2>
+            <p class="text-[11px] text-slate-500">Salva localmente apenas no seu navegador</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          id="closeAiModalBtn"
+          aria-label="Fechar configuração de IA"
+          class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <!-- Status Banner -->
+        <div id="aiModalStatusBox" class="p-3 rounded-xl border text-xs flex items-start gap-2.5">
+          <span id="aiModalStatusDot" class="w-2.5 h-2.5 rounded-full mt-1 shrink-0"></span>
+          <div class="min-w-0">
+            <p id="aiModalStatusTitle" class="font-bold"></p>
+            <p id="aiModalStatusDetail" class="mt-0.5 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <!-- Key Input -->
+        <div class="space-y-1.5">
+          <label for="geminiKeyInput" class="block text-xs font-bold text-slate-700">
+            Chave da API do Google AI Studio
+          </label>
+          <div class="relative">
+            <input
+              type="password"
+              id="geminiKeyInput"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Cole sua chave AIza..."
+              class="w-full pl-3.5 pr-10 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0455A1]/30 focus:border-[#0455A1]"
+            />
+            <button
+              type="button"
+              id="toggleKeyVisibilityBtn"
+              aria-label="Mostrar ou ocultar chave"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+            >
+              <svg id="eyeIconOpen" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg id="eyeIconClosed" class="hidden w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Crie gratuitamente em
+            <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#0455A1] underline hover:text-blue-800">
+              Google AI Studio
+            </a>.
+            Os 20 destinos principais e o modo offline funcionam sem chave.
+          </p>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex items-center justify-between gap-2 pt-1">
+          <button
+            type="button"
+            id="removeAiKeyBtn"
+            class="px-3 py-2.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200/80 transition disabled:opacity-40 disabled:pointer-events-none"
+          >
+            Remover Chave
+          </button>
+          <button
+            type="button"
+            id="saveAiKeyBtn"
+            class="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#0455A1] text-white hover:bg-blue-800 transition shadow-sm"
+          >
+            Salvar Chave
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subtle Toast Notification (No alert() used) -->
+  <div
+    id="toastBanner"
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-lg flex items-center gap-2 transition-all max-w-[90vw]"
+  >
+    <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+    <span id="toastMessage" class="truncate">Origem atualizada</span>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. OFFICIAL METRO LINES METADATA & BASE STATIONS
+    // =========================================================================
+    const LINE_STYLES = {
+      'L1-Azul': { label: 'Linha 1-Azul', bg: '#0455A1', text: '#FFFFFF' },
+      'L2-Verde': { label: 'Linha 2-Verde', bg: '#007E5E', text: '#FFFFFF' },
+      'L3-Vermelha': { label: 'Linha 3-Vermelha', bg: '#EE372F', text: '#FFFFFF' },
+      'L4-Amarela': { label: 'Linha 4-Amarela', bg: '#F5C400', text: '#0F172A' },
+      'L5-Lilás': { label: 'Linha 5-Lilás', bg: '#9B3894', text: '#FFFFFF' },
+      'L9-Esmeralda': { label: 'Linha 9-Esmeralda', bg: '#00A88F', text: '#FFFFFF' },
+      'L13-Jade': { label: 'Linha 13-Jade', bg: '#00AB5B', text: '#FFFFFF' },
+      'L15-Prata': { label: 'Linha 15-Prata', bg: '#858D90', text: '#FFFFFF' },
+    };
+
+    const DEFAULT_ORIGIN = 'Condomínio DNA Vila Mariana (R. Dr. Neto de Araújo, 265 - Vila Mariana, SP)';
+
+    const STORAGE_KEYS = {
+      GEMINI_API_KEY: 'gemini_api_key',
+      CUSTOM_ORIGIN: 'metro_sp_custom_origin',
+      FAMILY_PREFS: 'metro_sp_family_prefs',
+      RECENT_SEARCHES: 'metro_sp_recent_searches'
+    };
+
+    const BASE_STATIONS = {
+      'Estação Vila Mariana': {
+        name: 'Estação Vila Mariana',
+        lines: ['L1-Azul'],
+        distance: '600m',
+        walkMinutes: 9,
+        walkRoute: 'via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos',
+        mapsQuery: 'Estação Vila Mariana Metrô São Paulo'
+      },
+      'Estação Chácara Klabin': {
+        name: 'Estação Chácara Klabin',
+        lines: ['L2-Verde', 'L5-Lilás'],
+        distance: '900m',
+        walkMinutes: 11,
+        walkRoute: 'via R. Vergueiro',
+        mapsQuery: 'Estação Chácara Klabin Metrô São Paulo'
+      },
+      'Estação Ana Rosa': {
+        name: 'Estação Ana Rosa',
+        lines: ['L1-Azul', 'L2-Verde'],
+        distance: '900m',
+        walkMinutes: 13,
+        walkRoute: 'via R. Dr. Neto de Araújo e R. Vergueiro',
+        mapsQuery: 'Estação Ana Rosa Metrô São Paulo'
+      }
+    };
+
+    // =========================================================================
+    // 2. LOCAL INSTANT DATABASE (20 POPULAR DESTINATIONS IN SÃO PAULO)
+    // =========================================================================
+    const DESTINATIONS_DB = [
+      {
+        id: 'paulista-masp',
+        chipLabel: 'Av. Paulista / MASP',
+        name: 'Av. Paulista / MASP',
+        neighborhood: 'Bela Vista / Cerqueira César',
+        category: 'Cultura & Passeio',
+        totalTimeMinutes: 24,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores e portas de plataforma na L2-Verde',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro (calçada ampla)', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '4 estações: Ana Rosa, Paraíso, Brigadeiro → Trianon-Masp', durationMinutes: 9, stopsCount: 4 },
+          { type: 'walk', title: 'Desembarque em Trianon-Masp', subtitle: 'Saída direta na calçada do MASP / Parque Trianon (150m)', durationMinutes: 4 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô é imbatível para ir à Av. Paulista',
+        verdictReason: 'Trajeto direto sem baldeação na Linha 2-Verde, deixando a família na calçada do MASP em ~24 min totais. Aos domingos, a Av. Paulista fecha para carros e o trânsito no entorno fica bem carregado.',
+        uberDirectEstimateBRL: 'R$ 22–30',
+        uberDirectMinutes: 20,
+        customDepartureTip: 'Aos domingos, chegue entre 09h30 e 11h00 para aproveitar a Paulista Aberta com menos aglomeração para as crianças.',
+        customReturnTip: 'Evite voltar entre 17h00 e 19h00 nos dias úteis (pico na Linha 2-Verde).',
+        mapsDestinationQuery: 'MASP Museu de Arte de São Paulo Assis Chateaubriand'
+      },
+      {
+        id: 'aquario-sp',
+        chipLabel: 'Aquário de SP',
+        name: 'Aquário de São Paulo',
+        neighborhood: 'Ipiranga',
+        category: 'Passeio em Família',
+        totalTimeMinutes: 30,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Estações com elevador, mas trecho final longo a pé',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '1 estação até Santos-Imigrantes', durationMinutes: 3, stopsCount: 1 },
+          { type: 'uber', title: 'Uber curto ou caminhada de Santos-Imigrantes até o Aquário', subtitle: '1,2 km (~5 min de Uber ou ~16 min a pé pela R. Huet Bacelar)', durationMinutes: 16 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto é altamente recomendado com crianças',
+        verdictReason: 'O Aquário fica a apenas ~3,2 km do DNA Vila Mariana. Como o metrô exige caminhar até Chácara Klabin e depois mais 1,2 km da estação Santos-Imigrantes até a bilheteria, ir direto de Uber custa praticamente o mesmo que as passagens e deixa na porta em ~12 min.',
+        uberDirectEstimateBRL: 'R$ 14–19',
+        uberDirectMinutes: 12,
+        customDepartureTip: 'Compre ingressos online antecipados e chegue na abertura (09h00–10h00) para evitar filas com crianças de 6 e 3 anos.',
+        customReturnTip: 'Na saída (entre 13h30 e 16h00), peça o Uber pela R. Huet Bacelar.',
+        mapsDestinationQuery: 'Aquário de São Paulo, R. Huet Bacelar, 407'
+      },
+      {
+        id: 'ibirapuera',
+        chipLabel: 'Parque Ibirapuera',
+        name: 'Parque Ibirapuera (Portões 2, 3 e 5)',
+        neighborhood: 'Vila Mariana / Moema',
+        category: 'Parque & Natureza',
+        totalTimeMinutes: 31,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L5-Lilás'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: '100% portas de plataforma e elevadores na L5-Lilás',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L5-Lilás', title: 'Embarque na Linha 5-Lilás (Sentido Capão Redondo)', subtitle: '3 estações: Santa Cruz, Hospital São Paulo → AACD-Servidor', durationMinutes: 7, stopsCount: 3 },
+          { type: 'walk', title: 'Acesso ao Parque via Estação AACD-Servidor', subtitle: '1,1 km (~13 min a pé pela passarela/R. Pedro de Toledo) ou 4 min de Uber curto até Portão 3', durationMinutes: 13 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto costuma valer mais a pena para o Ibirapuera',
+        verdictReason: 'O parque fica a ~4,2 km do condomínio (~13 min de carro). Com crianças de 6 e 3 anos (e eventuais patinetes, bolas ou mochila), o Uber direto evita duas caminhadas de ~1 km cada. Se quiser passear de metrô, a Linha 5-Lilás até AACD-Servidor é super moderna e segura.',
+        uberDirectEstimateBRL: 'R$ 16–22',
+        uberDirectMinutes: 14,
+        customDepartureTip: 'Prefira entrar pelo Portão 3 ou Portão 5 (mais próximos dos parquinhos infantis e do Planetário).',
+        customReturnTip: 'Nos fins de semana, saia antes das 16h30 ou aguarde passar o pico das 17h30–19h00 na saída dos portões.',
+        mapsDestinationQuery: 'Parque Ibirapuera Portão 3 São Paulo'
+      },
+      {
+        id: 'catavento-mercadao',
+        chipLabel: 'Museu Catavento / Mercadão',
+        name: 'Museu Catavento / Mercadão',
+        neighborhood: 'Centro Histórico / Parque Dom Pedro',
+        category: 'Ciência & Gastronomia',
+        totalTimeMinutes: 32,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores na Estação Vila Mariana e São Bento',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '7 estações diretas até São Bento (via Sé)', durationMinutes: 14, stopsCount: 7 },
+          { type: 'uber', title: 'Trecho final de São Bento ao Catavento / Mercadão', subtitle: '750m (~4 min de Uber curto na porta ou 9 min a pé)', durationMinutes: 9 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Combo ideal: Metrô até São Bento + Uber curto na porta',
+        verdictReason: 'A Linha 1-Azul vence todo o trânsito da Av. 23 de Maio e Radial Leste. Ao sair na Estação São Bento, pegar um Uber de 4 minutos até a portaria do Museu Catavento garante conforto e segurança extra com crianças pequenas na região do Parque Dom Pedro.',
+        uberDirectEstimateBRL: 'R$ 28–38',
+        uberDirectMinutes: 26,
+        customDepartureTip: 'O Museu Catavento é incrível para crianças de 3 e 6 anos! Vá pela manhã (09h30–11h00) quando as salas interativas estão mais vazias.',
+        customReturnTip: 'Evite retornar na Linha 1-Azul entre 17h00 e 19h15 em dias úteis.',
+        mapsDestinationQuery: 'Museu Catavento São Paulo'
+      },
+      {
+        id: 'pinacoteca-luz',
+        chipLabel: 'Pinacoteca / Parque da Luz',
+        name: 'Pinacoteca / Parque da Luz',
+        neighborhood: 'Luz / Centro',
+        category: 'Arte & Parque',
+        totalTimeMinutes: 27,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Desembarque integrado com elevadores na Estação Luz',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '8 estações diretas até Estação Luz (sem baldeação)', durationMinutes: 16, stopsCount: 8 },
+          { type: 'walk', title: 'Saída Pinacoteca / Parque da Luz', subtitle: 'Acesso imediato em frente à saída da estação (100m)', durationMinutes: 2 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô direto (Linha 1-Azul) é a melhor opção',
+        verdictReason: 'Sem baldeações e com saída praticamente na porta da Pinacoteca e do Parque da Luz. Você escapa do trânsito pesado do corredor Norte-Sul.',
+        uberDirectEstimateBRL: 'R$ 30–40',
+        uberDirectMinutes: 28,
+        customDepartureTip: 'Aos sábados a entrada na Pinacoteca costuma ser gratuita; chegue por volta das 10h00.',
+        customReturnTip: 'Para voltar com tranquilidade, embarque na Estação Luz antes das 16h30.',
+        mapsDestinationQuery: 'Pinacoteca de São Paulo Praça da Luz'
+      },
+      {
+        id: 'liberdade',
+        chipLabel: 'Bairro da Liberdade',
+        name: 'Bairro da Liberdade (Praça da Liberdade)',
+        neighborhood: 'Liberdade',
+        category: 'Cultura & Gastronomia',
+        totalTimeMinutes: 21,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores na saída da Praça da Liberdade',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '5 estações diretas até Japão-Liberdade', durationMinutes: 10, stopsCount: 5 },
+          { type: 'walk', title: 'Saída Praça da Liberdade', subtitle: 'Escadas/elevador saem no coração da feira e das lojas (80m)', durationMinutes: 2 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô direto (Linha 1-Azul) é disparado o melhor',
+        verdictReason: 'Em apenas 5 estações você sai dentro da Praça da Liberdade. De carro ou Uber, as ruas estreitas do bairro ficam congestionadas e difíceis para embarque/desembarque nos fins de semana.',
+        uberDirectEstimateBRL: 'R$ 20–27',
+        uberDirectMinutes: 18,
+        customDepartureTip: 'Com crianças de 3 e 6 anos, vá bem cedo (09h30–10h30) nos fins de semana; após 12h00 a feirinha fica muito apertada para circular.',
+        customReturnTip: 'Se a estação Japão-Liberdade estiver cheia na volta à tarde, caminhe 6 min planos até a Estação São Joaquim (1 estação antes).',
+        mapsDestinationQuery: 'Praça da Liberdade São Paulo'
+      },
+      {
+        id: 'zoologico-sp',
+        chipLabel: 'Zoológico de SP',
+        name: 'Zoológico de São Paulo',
+        neighborhood: 'Água Funda',
+        category: 'Passeio em Família',
+        totalTimeMinutes: 34,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores no Terminal Jabaquara e ônibus acessível',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: '6 estações diretas até o terminal Jabaquara', durationMinutes: 13, stopsCount: 6 },
+          { type: 'uber', title: 'Conexão final Jabaquara → Portaria do Zoológico', subtitle: 'Ônibus oficial Ponte Orca (integrado ao terminal) ou 7 min de Uber curto (3,5 km)', durationMinutes: 12 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Metrô até Jabaquara + Uber curto (ou Ponte Orca)',
+        verdictReason: 'Evita o trânsito da Av. Cursino e Rod. dos Imigrantes. Do Terminal Jabaquara até a portaria do Zoo são apenas 7 minutos de Uber curto (muito prático para não enfrentar fila de ônibus com crianças de 3 e 6 anos).',
+        uberDirectEstimateBRL: 'R$ 26–35',
+        uberDirectMinutes: 22,
+        customDepartureTip: 'Vá logo na abertura (09h00) quando os animais estão mais ativos e o parque está fresco.',
+        customReturnTip: 'Na volta, o sentido Jabaquara → Vila Mariana na Linha 1-Azul costuma ter assentos livres mesmo no fim da tarde!',
+        mapsDestinationQuery: 'Zoológico de São Paulo Av. Miguel Estefno, 4241'
+      },
+      {
+        id: 'beco-batman',
+        chipLabel: 'Beco do Batman / Vila Madalena',
+        name: 'Beco do Batman / Vila Madalena',
+        neighborhood: 'Vila Madalena',
+        category: 'Arte Urbana & Passeio',
+        totalTimeMinutes: 40,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Portas de plataforma na L2-Verde; bairro com ladeiras',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '9 estações diretas até o terminal Vila Madalena', durationMinutes: 20, stopsCount: 9 },
+          { type: 'uber', title: 'Descida até o Beco do Batman (R. Gonçalo Afonso)', subtitle: '1,1 km (~5 min de Uber curto ou 13 min caminhando em descida)', durationMinutes: 9 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Metrô direto (L2-Verde) + Uber curto na subida de volta',
+        verdictReason: 'A Linha 2-Verde leva direto sem baldeações. Na ida dá para descer caminhando da estação até o Beco, mas na volta recomendamos um Uber curto até a estação porque a ladeira é bem íngreme para uma criança de 3 anos.',
+        uberDirectEstimateBRL: 'R$ 32–44',
+        uberDirectMinutes: 28,
+        customDepartureTip: 'Prefira manhãs de sábado ou domingo (10h00–11h30) para tirar fotos com espaço.',
+        customReturnTip: 'Chame o Uber na R. Harmonia ou R. Aspicuelta para subir até a Estação Vila Madalena.',
+        mapsDestinationQuery: 'Beco do Batman Vila Madalena São Paulo'
+      },
+      {
+        id: 'shopping-santa-cruz',
+        chipLabel: 'Shopping Metrô Santa Cruz',
+        name: 'Shopping Metrô Santa Cruz',
+        neighborhood: 'Vila Mariana',
+        category: 'Compras & Cinema',
+        totalTimeMinutes: 13,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Acesso interno coberto direto ao shopping com elevadores',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Jabaquara)', subtitle: 'Apenas 1 estação até Santa Cruz', durationMinutes: 2, stopsCount: 1 },
+          { type: 'walk', title: 'Entrada integrada ao Shopping', subtitle: 'Acesso direto pelas catracas internas sem sair na rua', durationMinutes: 2 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto sai praticamente o mesmo valor e deixa na porta',
+        verdictReason: 'São apenas 1,9 km (~6 min de carro). Para uma família com 3 pagantes no metrô (R$ 16,20), um Uber direto custa em torno de R$ 11–15 e evita caminhar 600m até a estação. Ótima opção de metrô apenas se quiserem curtir o passeio de trem!',
+        uberDirectEstimateBRL: 'R$ 11–15',
+        uberDirectMinutes: 6,
+        customDepartureTip: 'Excelente opção para dias de chuva com crianças (cinema, praça de alimentação e lojas).',
+        customReturnTip: 'Qualquer horário fora das 17h30–19h00 é super rápido para voltar.',
+        mapsDestinationQuery: 'Shopping Metrô Santa Cruz São Paulo'
+      },
+      {
+        id: 'villa-lobos-eldorado',
+        chipLabel: 'Parque Villa-Lobos / Eldorado',
+        name: 'Parque Villa-Lobos / Shopping Eldorado',
+        neighborhood: 'Alto de Pinheiros / Pinheiros',
+        category: 'Parque & Lazer',
+        totalTimeMinutes: 46,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde', 'L4-Amarela', 'L9-Esmeralda'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: '2 baldeações necessárias (Consolação e Pinheiros)',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Linha 2-Verde até Consolação', subtitle: '5 estações (sentido Vila Madalena)', durationMinutes: 11, stopsCount: 5 },
+          { type: 'transfer', lineCode: 'L4-Amarela', title: 'Baldeação → Linha 4-Amarela (Paulista → Pinheiros)', subtitle: '3 estações (Fradique Coutinho, Faria Lima, Pinheiros)', durationMinutes: 10, stopsCount: 3 },
+          { type: 'transfer', lineCode: 'L9-Esmeralda', title: 'Baldeação → Linha 9-Esmeralda', subtitle: '1 estação até Hebraica-Rebouças (Eldorado) ou 2 até Villa-Lobos–Jaguaré', durationMinutes: 14, stopsCount: 2 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto é muito mais confortável para a família',
+        verdictReason: 'Embora seja totalmente conectado sobre trilhos, fazer 2 baldeações longas (Consolação/Paulista e Pinheiros) com crianças de 6 e 3 anos cansa bastante. De Uber fora do horário de pico, você chega em ~26 min direto no portão principal do Parque Villa-Lobos.',
+        uberDirectEstimateBRL: 'R$ 34–46',
+        uberDirectMinutes: 26,
+        customDepartureTip: 'Saia entre 09h00 e 10h30 nos fins de semana para pegar o parque fresco e com sombra.',
+        customReturnTip: 'Evite retornar entre 17h00 e 19h00 pela Marginal Pinheiros.',
+        mapsDestinationQuery: 'Parque Villa-Lobos Av. Prof. Fonseca Rodrigues, 2001'
+      },
+      {
+        id: 'allianz-parque',
+        chipLabel: 'Allianz Parque',
+        name: 'Allianz Parque',
+        neighborhood: 'Água Branca / Perdizes',
+        category: 'Estádio & Eventos',
+        totalTimeMinutes: 42,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde', 'L4-Amarela', 'L3-Vermelha'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Acesso plano na Estação Palmeiras-Barra Funda',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Linha 2-Verde até Clínicas (ou Consolação)', subtitle: '6 estações (sentido Vila Madalena)', durationMinutes: 13, stopsCount: 6 },
+          { type: 'uber', title: 'Opção Família: Uber curto de Clínicas até o Allianz', subtitle: '3,2 km (~9 min) — evita 2 baldeações (L4-Amarela + L3-Vermelha até Barra Funda)', durationMinutes: 18 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Metrô (L2-Verde até Clínicas) + Uber curto (ou metrô até Barra Funda)',
+        verdictReason: 'Em dias de jogo ou evento, as ruas ao redor do Allianz Parque ficam bloqueadas para carros. Ir de Linha 2-Verde até Clínicas + Uber curto (ou fazer baldeação para Linha 3-Vermelha até Palmeiras-Barra Funda e caminhar 800m planos) garante chegada pontual.',
+        uberDirectEstimateBRL: 'R$ 34–48',
+        uberDirectMinutes: 28,
+        customDepartureTip: 'Chegue ao menos 1h30 antes do início de jogos ou eventos infantis.',
+        customReturnTip: 'Na saída de grandes eventos, caminhe 10 min até a Estação Palmeiras-Barra Funda para evitar tarifa dinâmica altíssima.',
+        mapsDestinationQuery: 'Allianz Parque Av. Francisco Matarazzo, 1705'
+      },
+      {
+        id: 'museu-ipiranga',
+        chipLabel: 'Museu do Ipiranga',
+        name: 'Museu do Ipiranga (Parque da Independência)',
+        neighborhood: 'Ipiranga',
+        category: 'História & Parque',
+        totalTimeMinutes: 28,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores na Estação Alto do Ipiranga',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Prudente)', subtitle: '2 estações: Santos-Imigrantes → Alto do Ipiranga', durationMinutes: 4, stopsCount: 2 },
+          { type: 'uber', title: 'Uber curto de Alto do Ipiranga até o Museu', subtitle: '1,3 km (~5 min de carro ou 16 min caminhando)', durationMinutes: 13 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto (~12 min) é mais prático e econômico para a família',
+        verdictReason: 'Como você já está na Vila Mariana (a ~3,8 km do Museu), ir direto de Uber custa em torno de R$ 15–20 — menos do que pagar 3 passagens de metrô (R$ 16,20) + um segundo Uber na chegada.',
+        uberDirectEstimateBRL: 'R$ 15–21',
+        uberDirectMinutes: 12,
+        customDepartureTip: 'Reserve os ingressos gratuitos ou pagos pelo site oficial com antecedência; os jardins do Parque da Independência são ótimos para correr.',
+        customReturnTip: 'Retorno tranquilo de Uber fora do horário das 17h30–19h00.',
+        mapsDestinationQuery: 'Museu do Ipiranga Parque da Independência São Paulo'
+      },
+      {
+        id: 'centro-farol-santander',
+        chipLabel: 'Centro / Farol Santander',
+        name: 'Centro Histórico / Farol Santander',
+        neighborhood: 'Centro Histórico',
+        category: 'Mirante & História',
+        totalTimeMinutes: 26,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Saída plana pela Ladeira Porto Geral / Boa Vista',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '7 estações diretas até São Bento', durationMinutes: 14, stopsCount: 7 },
+          { type: 'walk', title: 'Caminhada curta até o Farol Santander', subtitle: '250m planos pela R. João Brícola / Boa Vista', durationMinutes: 3 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô direto (Linha 1-Azul até São Bento) é ideal',
+        verdictReason: 'A Estação São Bento fica a apenas 250 metros do Farol Santander e do Pateo do Collegio, poupando todo o trânsito do Centro.',
+        uberDirectEstimateBRL: 'R$ 26–35',
+        uberDirectMinutes: 24,
+        customDepartureTip: 'As exposições imersivas e o mirante do Farol Santander encantam crianças de 6 anos; prefira manhãs de sábado ou domingo.',
+        customReturnTip: 'Embarque de volta em São Bento antes das 16h30.',
+        mapsDestinationQuery: 'Farol Santander Rua João Brícola, 24 São Paulo'
+      },
+      {
+        id: 'aeroporto-congonhas',
+        chipLabel: 'Aeroporto de Congonhas',
+        name: 'Aeroporto de Congonhas (CGH)',
+        neighborhood: 'Campo Belo / Vila Congonhas',
+        category: 'Aeroporto',
+        totalTimeMinutes: 27,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L5-Lilás'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Elevadores e portas de plataforma na L5-Lilás',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L5-Lilás', title: 'Embarque na Linha 5-Lilás (Sentido Capão Redondo)', subtitle: '4 estações: Santa Cruz, Hosp. São Paulo, AACD-Servidor, Moema, Eucaliptos → Campo Belo', durationMinutes: 10, stopsCount: 6 },
+          { type: 'uber', title: 'Uber curto Estação Campo Belo → Embarque CGH', subtitle: '2,8 km (~6 min direto até o piso de embarque)', durationMinutes: 6 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto recomendado com malas e crianças',
+        verdictReason: 'Congonhas fica a ~7,5 km do condomínio (~18–24 min fora do pico). Com malas e crianças de 6 e 3 anos, ir direto de Uber é muito mais cômodo. Guarde o plano Metrô L5-Lilás até Campo Belo + Uber curto caso a Av. 23 de Maio esteja travada na hora do rush!',
+        uberDirectEstimateBRL: 'R$ 25–35',
+        uberDirectMinutes: 20,
+        customDepartureTip: 'Em dias úteis entre 07h30–09h30 e 17h00–19h30, saia com pelo menos 30 min extras de folga.',
+        customReturnTip: 'No desembarque de Congonhas, utilize a área oficial de carros por aplicativo no piso inferior.',
+        mapsDestinationQuery: 'Aeroporto de São Paulo Congonhas'
+      },
+      {
+        id: 'aeroporto-guarulhos',
+        chipLabel: 'Aeroporto de Guarulhos (GRU)',
+        name: 'Aeroporto Internacional de Guarulhos (GRU)',
+        neighborhood: 'Cumbica - Guarulhos',
+        category: 'Aeroporto',
+        totalTimeMinutes: 68,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul', 'L13-Jade'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Transferência interna na Luz + ônibus gratuito entre terminais',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Linha 1-Azul até Estação Luz', subtitle: '8 estações (sentido Tucuruvi)', durationMinutes: 16, stopsCount: 8 },
+          { type: 'transfer', lineCode: 'L13-Jade', title: 'Expresso Aeroporto (Linha 13-Jade)', subtitle: 'Partidas de hora em hora (05h às 00h) direto até Estação Aeroporto-Guarulhos + ônibus circular aos Terminais 1, 2 e 3', durationMinutes: 43, stopsCount: 1 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber/Táxi direto é fortemente recomendado com crianças e bagagens',
+        verdictReason: 'Apesar do Expresso Aeroporto (Linha 13-Jade) custar apenas R$ 5,40, ele parte a cada 1 hora cheia na Estação Luz e exige pegar um ônibus interno ao chegar em Guarulhos. Com crianças de 6 e 3 anos e malas, o Uber direto porta a porta (~45–60 min fora do pico) evita muito desgaste.',
+        uberDirectEstimateBRL: 'R$ 85–120',
+        uberDirectMinutes: 50,
+        customDepartureTip: 'Se optar pelo Expresso Aeroporto, chegue na Estação Luz 10 min antes da hora cheia (ex: 09h50 para o trem das 10h00).',
+        customReturnTip: 'Na volta de GRU fora do pico, o Uber pela Marginal Tietê / 23 de Maio leva ~45–55 min.',
+        mapsDestinationQuery: 'Aeroporto Internacional de São Paulo Guarulhos'
+      },
+      {
+        id: 'instituto-butantan',
+        chipLabel: 'Instituto Butantan',
+        name: 'Instituto Butantan',
+        neighborhood: 'Butantã',
+        category: 'Ciência & Natureza',
+        totalTimeMinutes: 42,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde', 'L4-Amarela'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: '100% portas de plataforma e elevadores nas duas linhas',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Linha 2-Verde até Consolação', subtitle: '5 estações (sentido Vila Madalena)', durationMinutes: 11, stopsCount: 5 },
+          { type: 'transfer', lineCode: 'L4-Amarela', title: 'Baldeação → Linha 4-Amarela (Paulista → Butantã)', subtitle: '4 estações: Fradique Coutinho, Faria Lima, Pinheiros → Butantã', durationMinutes: 11, stopsCount: 4 },
+          { type: 'uber', title: 'Estação Butantã → Portaria do Parque', subtitle: '1,1 km (~4 min de Uber curto ou ônibus circular USP/Butantã)', durationMinutes: 9 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Metrô (L2-Verde + L4-Amarela) + Uber curto na portaria',
+        verdictReason: 'As Linhas 2-Verde e 4-Amarela são as mais modernas de SP, com portas de plataforma e ar-condicionado. Pegar um Uber curto de 4 min na saída da Estação Butantã evita a caminhada pela Av. Vital Brasil com as crianças.',
+        uberDirectEstimateBRL: 'R$ 32–44',
+        uberDirectMinutes: 26,
+        customDepartureTip: 'O serpentário e o Museu Biológico fazem enorme sucesso com crianças de 3 e 6 anos!',
+        customReturnTip: 'Evite a baldeação Paulista/Consolação entre 17h30 e 19h00.',
+        mapsDestinationQuery: 'Instituto Butantan Av. Vital Brasil, 1500'
+      },
+      {
+        id: 'museu-lingua-portuguesa',
+        chipLabel: 'Museu da Língua Portuguesa',
+        name: 'Museu da Língua Portuguesa / Estação da Luz',
+        neighborhood: 'Luz',
+        category: 'Cultura & Interatividade',
+        totalTimeMinutes: 26,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Entrada do museu dentro do complexo da Estação Luz',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '8 estações diretas até Luz', durationMinutes: 16, stopsCount: 8 },
+          { type: 'walk', title: 'Acesso interno ao Museu', subtitle: 'Bilheteria e elevadores logo na saída da plataforma', durationMinutes: 1 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô direto (Linha 1-Azul) é perfeito',
+        verdictReason: 'Você desembarca literalmente dentro do complexo histórico da Estação da Luz, sem precisar atravessar ruas movimentadas com as crianças.',
+        uberDirectEstimateBRL: 'R$ 30–40',
+        uberDirectMinutes: 28,
+        customDepartureTip: 'As instalações audiovisuais são muito lúdicas para crianças de 6 anos; sábados têm entrada gratuita.',
+        customReturnTip: 'Retorno direto pela Linha 1-Azul (sentido Jabaquara) em 16 min.',
+        mapsDestinationQuery: 'Museu da Língua Portuguesa Praça da Luz São Paulo'
+      },
+      {
+        id: 'japan-house-paulista',
+        chipLabel: 'Japan House / Shopping Cidade SP',
+        name: 'Japan House / Shopping Cidade São Paulo',
+        neighborhood: 'Bela Vista (Av. Paulista)',
+        category: 'Cultura & Compras',
+        totalTimeMinutes: 21,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Portas de plataforma e elevadores na Estação Brigadeiro',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '3 estações diretas: Ana Rosa, Paraíso → Brigadeiro', durationMinutes: 7, stopsCount: 3 },
+          { type: 'walk', title: 'Caminhada plana na Av. Paulista', subtitle: '200m até a Japan House e 450m até o Shopping Cidade SP', durationMinutes: 3 }
+        ],
+        verdictWinner: 'metro',
+        verdictTitle: 'Metrô direto (Linha 2-Verde até Brigadeiro) é rapidíssimo',
+        verdictReason: 'São apenas 3 estações na Linha 2-Verde. A Japan House tem entrada gratuita e exposições táteis/visuais super interessantes para crianças.',
+        uberDirectEstimateBRL: 'R$ 18–25',
+        uberDirectMinutes: 16,
+        customDepartureTip: 'Combine Japan House + Sesc Avenida Paulista (pertinho, com mirante e espaço infantil).',
+        customReturnTip: 'Embarque na Estação Brigadeiro fora do pico das 17h30–19h00.',
+        mapsDestinationQuery: 'Japan House São Paulo Av. Paulista, 52'
+      },
+      {
+        id: 'sesc-pompeia',
+        chipLabel: 'Sesc Pompeia / Bourbon',
+        name: 'Sesc Pompeia / Bourbon Shopping',
+        neighborhood: 'Pompeia',
+        category: 'Lazer & Cultura',
+        totalTimeMinutes: 39,
+        boardingStation: 'Estação Chácara Klabin',
+        linesUsed: ['L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Linha 2-Verde direta sem baldeações + Uber curto',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Chácara Klabin', subtitle: '900m via R. Vergueiro', durationMinutes: 11 },
+          { type: 'metro', lineCode: 'L2-Verde', title: 'Embarque na Linha 2-Verde (Sentido Vila Madalena)', subtitle: '9 estações diretas até Vila Madalena', durationMinutes: 20, stopsCount: 9 },
+          { type: 'uber', title: 'Uber curto Vila Madalena → Sesc Pompeia', subtitle: '2,4 km (~8 min direto até a entrada da R. Clélia)', durationMinutes: 8 }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Metrô (Linha 2-Verde até Vila Madalena) + Uber curto',
+        verdictReason: 'Você cruza toda a cidade pelo eixo da Paulista na Linha 2-Verde sem nenhuma baldeação e pega um Uber curto de 8 minutos até o Sesc Pompeia.',
+        uberDirectEstimateBRL: 'R$ 35–48',
+        uberDirectMinutes: 30,
+        customDepartureTip: 'O Sesc Pompeia tem área de convivência plana e programação infantil excelente nos fins de semana.',
+        customReturnTip: 'Volte de Uber curto até a Estação Vila Madalena para pegar a Linha 2-Verde vazia no ponto inicial!',
+        mapsDestinationQuery: 'Sesc Pompeia Rua Clélia, 93 São Paulo'
+      },
+      {
+        id: 'parque-aclimacao',
+        chipLabel: 'Parque da Aclimação',
+        name: 'Parque da Aclimação',
+        neighborhood: 'Aclimação',
+        category: 'Parque de Bairro',
+        totalTimeMinutes: 27,
+        boardingStation: 'Estação Vila Mariana',
+        linesUsed: ['L1-Azul'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        accessibilityNote: 'Parque plano vizinho à Vila Mariana',
+        steps: [
+          { type: 'walk', title: 'Caminhada até Estação Vila Mariana', subtitle: '600m via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos', durationMinutes: 9 },
+          { type: 'metro', lineCode: 'L1-Azul', title: 'Embarque na Linha 1-Azul (Sentido Tucuruvi)', subtitle: '3 estações: Ana Rosa, Paraíso → Vergueiro', durationMinutes: 6, stopsCount: 3 },
+          { type: 'walk', title: 'Caminhada Estação Vergueiro → Parque da Aclimação', subtitle: '1,0 km (~12 min a pé)', durationMinutes: 12 }
+        ],
+        verdictWinner: 'uber',
+        verdictTitle: 'Uber direto (~8 min) é muito mais barato e rápido',
+        verdictReason: 'O Parque da Aclimação é vizinho da Vila Mariana (~2,3 km). Ir direto de Uber custa em torno de R$ 12–15 — menos do que 3 bilhetes de metrô (R$ 16,20) — e deixa na frente do parquinho em 8 minutos.',
+        uberDirectEstimateBRL: 'R$ 12–15',
+        uberDirectMinutes: 8,
+        customDepartureTip: 'Ótimo parque de bairro com lago, patos e parquinho cercado para crianças de 3 e 6 anos.',
+        customReturnTip: 'Retorno rápido de Uber a qualquer hora do dia.',
+        mapsDestinationQuery: 'Parque da Aclimação São Paulo'
+      }
+    ];
+
+    // =========================================================================
+    // 3. HOURLY SCHEDULE DATA (05h TO 00h) FOR METRO & UBER
+    // =========================================================================
+    const HOURS_LIST = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0];
+
+    const SCHEDULE_PROFILES = {
+      weekday: {
+        label: 'Dia Útil (Seg–Sex)',
+        bestDeparture: '09h30 às 11h30 ou 14h00 às 16h00',
+        bestReturn: '14h00 às 16h30 ou após 20h00',
+        metro: {
+          5: { level: 'green', note: '05h (Dia Útil) — Metrô: Abertura da operação (04h40). Vagões muito vazios.' },
+          6: { level: 'yellow', note: '06h (Dia Útil) — Metrô: Fluxo subindo gradualmente, mas ainda há assentos.' },
+          7: { level: 'red', note: '07h (Dia Útil) — Metrô: Pico da manhã iniciando. Evite com crianças pequenas.' },
+          8: { level: 'red', note: '08h (Dia Útil) — Metrô: Horário mais lotado da manhã nas Linhas 1-Azul e 2-Verde.' },
+          9: { level: 'red', note: '09h (Dia Útil) — Metrô: Ainda cheio até ~09h30; aguarde mais alguns minutos se puder.' },
+          10: { level: 'green', note: '10h (Dia Útil) — Metrô: Janela recomendada! Vagões tranquilos e assentos livres.' },
+          11: { level: 'green', note: '11h (Dia Útil) — Metrô: Excelente horário para embarcar com crianças.' },
+          12: { level: 'yellow', note: '12h (Dia Útil) — Metrô: Movimento moderado de almoço, embarque confortável.' },
+          13: { level: 'yellow', note: '13h (Dia Útil) — Metrô: Fluxo moderado, bom conforto nos trens.' },
+          14: { level: 'green', note: '14h (Dia Útil) — Metrô: Janela ideal da tarde para passear ou retornar.' },
+          15: { level: 'green', note: '15h (Dia Útil) — Metrô: Vagões tranquilos, ótimo para voltar antes do pico.' },
+          16: { level: 'green', note: '16h (Dia Útil) — Metrô: Tranquilo até ~16h30; depois começa a encher.' },
+          17: { level: 'red', note: '17h (Dia Útil) — Metrô: Início do pico da tarde. Plataformas cheias.' },
+          18: { level: 'red', note: '18h (Dia Útil) — Metrô: Pico máximo da tarde. Evite baldeações com crianças.' },
+          19: { level: 'red', note: '19h (Dia Útil) — Metrô: Ainda cheio até ~19h45 nas estações centrais.' },
+          20: { level: 'green', note: '20h (Dia Útil) — Metrô: Fluxo normalizado e viagem tranquila.' },
+          21: { level: 'green', note: '21h (Dia Útil) — Metrô: Vagões vazios e boa segurança nas estações.' },
+          22: { level: 'green', note: '22h (Dia Útil) — Metrô: Tranquilo, fique atento ao horário de fechamento.' },
+          23: { level: 'green', note: '23h (Dia Útil) — Metrô: Última hora de operação regular antes da 00h.' },
+          0: { level: 'yellow', note: '00h (Dia Útil) — Metrô: Encerramento das estações (últimos trens às 00h00).' }
+        },
+        uber: {
+          5: { level: 'green', note: '05h (Dia Útil) — Uber: Avenidas 23 de Maio e Vergueiro totalmente livres.' },
+          6: { level: 'green', note: '06h (Dia Útil) — Uber: Trânsito fluido e tarifa normal.' },
+          7: { level: 'red', note: '07h (Dia Útil) — Uber: Trânsito intenso na saída da Vila Mariana e tarifa dinâmica.' },
+          8: { level: 'red', note: '08h (Dia Útil) — Uber: Congestionamento pesado nos corredores Norte-Sul.' },
+          9: { level: 'red', note: '09h (Dia Útil) — Uber: Lentidão até ~09h30; aguarde clarear para economizar.' },
+          10: { level: 'green', note: '10h (Dia Útil) — Uber: Janela ideal! Vias fluidas e carros rápidos na porta.' },
+          11: { level: 'green', note: '11h (Dia Útil) — Uber: Excelente horário para sair de carro com crianças.' },
+          12: { level: 'yellow', note: '12h (Dia Útil) — Uber: Movimento moderado de almoço nos bairros comerciais.' },
+          13: { level: 'yellow', note: '13h (Dia Útil) — Uber: Trânsito moderado, sem grandes retenções.' },
+          14: { level: 'green', note: '14h (Dia Útil) — Uber: Janela ideal da tarde para sair ou retornar.' },
+          15: { level: 'green', note: '15h (Dia Útil) — Uber: Fluidez boa e preços estáveis antes do rush.' },
+          16: { level: 'green', note: '16h (Dia Útil) — Uber: Bom até ~16h30; após esse horário o trânsito trava.' },
+          17: { level: 'red', note: '17h (Dia Útil) — Uber: Início do rush na Av. 23 de Maio e Ricardo Jafet.' },
+          18: { level: 'red', note: '18h (Dia Útil) — Uber: Pior horário de trânsito e tarifa dinâmica alta.' },
+          19: { level: 'red', note: '19h (Dia Útil) — Uber: Lentidão severa até ~19h45.' },
+          20: { level: 'green', note: '20h (Dia Útil) — Uber: Avenidas livres e tarifa normalizada para voltar.' },
+          21: { level: 'green', note: '21h (Dia Útil) — Uber: Retorno rápido e confortável porta a porta.' },
+          22: { level: 'green', note: '22h (Dia Útil) — Uber: Trânsito livre em toda a região.' },
+          23: { level: 'green', note: '23h (Dia Útil) — Uber: Deslocamento muito rápido.' },
+          0: { level: 'green', note: '00h (Dia Útil) — Uber: Vias livres na madrugada.' }
+        }
+      },
+      weekend: {
+        label: 'Fim de Semana / Feriado',
+        bestDeparture: '08h30 às 11h30 ou 13h30 às 16h00',
+        bestReturn: 'Até 17h00 ou após 20h00',
+        metro: {
+          5: { level: 'green', note: '05h (Fim de Semana) — Metrô: Abertura tranquila, vagões vazios.' },
+          6: { level: 'green', note: '06h (Fim de Semana) — Metrô: Muito tranquilo.' },
+          7: { level: 'green', note: '07h (Fim de Semana) — Metrô: Ótimo para passeios matinais.' },
+          8: { level: 'green', note: '08h (Fim de Semana) — Metrô: Excelente janela da manhã com assentos livres.' },
+          9: { level: 'green', note: '09h (Fim de Semana) — Metrô: Ideal para ir a parques, museus e Liberdade.' },
+          10: { level: 'green', note: '10h (Fim de Semana) — Metrô: Confortável e seguro para ir com crianças.' },
+          11: { level: 'green', note: '11h (Fim de Semana) — Metrô: Bom fluxo, sem aperto.' },
+          12: { level: 'yellow', note: '12h (Fim de Semana) — Metrô: Movimento moderado de lazer e shoppings.' },
+          13: { level: 'yellow', note: '13h (Fim de Semana) — Metrô: Movimento moderado, tranquilo para famílias.' },
+          14: { level: 'yellow', note: '14h (Fim de Semana) — Metrô: Fluxo moderado nas linhas da Paulista e Centro.' },
+          15: { level: 'yellow', note: '15h (Fim de Semana) — Metrô: Movimento moderado de passeios.' },
+          16: { level: 'yellow', note: '16h (Fim de Semana) — Metrô: Movimento moderado de retorno de lazer.' },
+          17: { level: 'yellow', note: '17h (Fim de Semana) — Metrô: Leve aumento na saída de eventos e parques.' },
+          18: { level: 'yellow', note: '18h (Fim de Semana) — Metrô: Movimento moderado, bem mais leve que dia útil.' },
+          19: { level: 'green', note: '19h (Fim de Semana) — Metrô: Viagem tranquila para retornar.' },
+          20: { level: 'green', note: '20h (Fim de Semana) — Metrô: Vagões vazios e confortáveis.' },
+          21: { level: 'green', note: '21h (Fim de Semana) — Metrô: Retorno noturno tranquilo.' },
+          22: { level: 'green', note: '22h (Fim de Semana) — Metrô: Tranquilo (aos sábados opera 24h nas Linhas 1, 2, 3 e 15!).' },
+          23: { level: 'green', note: '23h (Fim de Semana) — Metrô: Operação normal; sábados seguem madrugada adentro.' },
+          0: { level: 'green', note: '00h (Fim de Semana) — Metrô: Sábado→Domingo tem operação 24h (L1, L2, L3, L15); Domingo fecha às 00h.' }
+        },
+        uber: {
+          5: { level: 'green', note: '05h (Fim de Semana) — Uber: Vias totalmente livres.' },
+          6: { level: 'green', note: '06h (Fim de Semana) — Uber: Trânsito livre.' },
+          7: { level: 'green', note: '07h (Fim de Semana) — Uber: Ótima oferta de carros na Vila Mariana.' },
+          8: { level: 'green', note: '08h (Fim de Semana) — Uber: Perfeito para sair cedo com crianças.' },
+          9: { level: 'green', note: '09h (Fim de Semana) — Uber: Trânsito fluido e tarifa normal.' },
+          10: { level: 'green', note: '10h (Fim de Semana) — Uber: Excelente fluidez em toda a cidade.' },
+          11: { level: 'green', note: '11h (Fim de Semana) — Uber: Ruas tranquilas (atenção apenas perto da Paulista fechada).' },
+          12: { level: 'green', note: '12h (Fim de Semana) — Uber: Bom deslocamento para almoço.' },
+          13: { level: 'green', note: '13h (Fim de Semana) — Uber: Trânsito leve na Vila Mariana.' },
+          14: { level: 'green', note: '14h (Fim de Semana) — Uber: Fluidez excelente à tarde.' },
+          15: { level: 'green', note: '15h (Fim de Semana) — Uber: Deslocamento rápido.' },
+          16: { level: 'green', note: '16h (Fim de Semana) — Uber: Tranquilo antes da saída dos parques.' },
+          17: { level: 'yellow', note: '17h (Fim de Semana) — Uber: Aumento moderado de demanda na saída de parques/shoppings.' },
+          18: { level: 'yellow', note: '18h (Fim de Semana) — Uber: Leve tarifa dinâmica em pontos turísticos.' },
+          19: { level: 'yellow', note: '19h (Fim de Semana) — Uber: Demanda moderada no início da noite.' },
+          20: { level: 'green', note: '20h (Fim de Semana) — Uber: Vias livres e espera curta.' },
+          21: { level: 'green', note: '21h (Fim de Semana) — Uber: Retorno tranquilo.' },
+          22: { level: 'green', note: '22h (Fim de Semana) — Uber: Trânsito livre.' },
+          23: { level: 'green', note: '23h (Fim de Semana) — Uber: Rápido e fluido.' },
+          0: { level: 'green', note: '00h (Fim de Semana) — Uber: Vias livres.' }
+        }
+      }
+    };
+
+    // =========================================================================
+    // 4. APPLICATION STATE
+    // =========================================================================
+    const isTodayWeekend = [0, 6].includes(new Date().getDay());
+
+    const state = {
+      origin: DEFAULT_ORIGIN,
+      isCustomOrigin: false,
+      dayType: isTodayWeekend ? 'weekend' : 'weekday',
+      familyMode: true,
+      adults: 2,
+      child6: 1,
+      child3: 1,
+      currentRoute: DESTINATIONS_DB[0],
+      isAiRoute: false,
+      isOfflineFallback: false,
+      selectedHour: new Date().getHours() >= 5 ? new Date().getHours() : 10,
+      selectedBarType: 'metro',
+      recentSearches: []
+    };
+
+    // =========================================================================
+    // 5. DOM REFERENCES
+    // =========================================================================
+    const els = {
+      liveClockText: document.getElementById('liveClockText'),
+      openAiSettingsBtn: document.getElementById('openAiSettingsBtn'),
+      aiKeyHeaderDot: document.getElementById('aiKeyHeaderDot'),
+      aiSettingsModal: document.getElementById('aiSettingsModal'),
+      closeAiModalBtn: document.getElementById('closeAiModalBtn'),
+      aiModalStatusBox: document.getElementById('aiModalStatusBox'),
+      aiModalStatusDot: document.getElementById('aiModalStatusDot'),
+      aiModalStatusTitle: document.getElementById('aiModalStatusTitle'),
+      aiModalStatusDetail: document.getElementById('aiModalStatusDetail'),
+      geminiKeyInput: document.getElementById('geminiKeyInput'),
+      toggleKeyVisibilityBtn: document.getElementById('toggleKeyVisibilityBtn'),
+      eyeIconOpen: document.getElementById('eyeIconOpen'),
+      eyeIconClosed: document.getElementById('eyeIconClosed'),
+      saveAiKeyBtn: document.getElementById('saveAiKeyBtn'),
+      removeAiKeyBtn: document.getElementById('removeAiKeyBtn'),
+      originDisplayText: document.getElementById('originDisplayText'),
+      customOriginTag: document.getElementById('customOriginTag'),
+      toggleEditOriginBtn: document.getElementById('toggleEditOriginBtn'),
+      originEditorBox: document.getElementById('originEditorBox'),
+      originInput: document.getElementById('originInput'),
+      resetOriginBtn: document.getElementById('resetOriginBtn'),
+      saveOriginBtn: document.getElementById('saveOriginBtn'),
+      toggleBaseStationsBtn: document.getElementById('toggleBaseStationsBtn'),
+      baseStationsChevron: document.getElementById('baseStationsChevron'),
+      baseStationsList: document.getElementById('baseStationsList'),
+      baseStationLinkVilaMariana: document.getElementById('baseStationLinkVilaMariana'),
+      baseStationLinkChacaraKlabin: document.getElementById('baseStationLinkChacaraKlabin'),
+      baseStationLinkAnaRosa: document.getElementById('baseStationLinkAnaRosa'),
+      destinationInput: document.getElementById('destinationInput'),
+      clearSearchBtn: document.getElementById('clearSearchBtn'),
+      planRouteBtn: document.getElementById('planRouteBtn'),
+      autocompleteDropdown: document.getElementById('autocompleteDropdown'),
+      recentSearchesSection: document.getElementById('recentSearchesSection'),
+      recentSearchesContainer: document.getElementById('recentSearchesContainer'),
+      clearRecentBtn: document.getElementById('clearRecentBtn'),
+      quickChipsContainer: document.getElementById('quickChipsContainer'),
+      btnWeekday: document.getElementById('btnWeekday'),
+      btnWeekend: document.getElementById('btnWeekend'),
+      autoDayBadge: document.getElementById('autoDayBadge'),
+      familyModeToggle: document.getElementById('familyModeToggle'),
+      familyModeKnob: document.getElementById('familyModeKnob'),
+      familyDetailsPanel: document.getElementById('familyDetailsPanel'),
+      singleFareSummary: document.getElementById('singleFareSummary'),
+      countAdults: document.getElementById('countAdults'),
+      countChild6: document.getElementById('countChild6'),
+      countChild3: document.getElementById('countChild3'),
+      payingCountText: document.getElementById('payingCountText'),
+      fareOneWayText: document.getElementById('fareOneWayText'),
+      fareRoundTripText: document.getElementById('fareRoundTripText'),
+      aiLoadingCard: document.getElementById('aiLoadingCard'),
+      routeResultCard: document.getElementById('routeResultCard'),
+      routeCategoryBadge: document.getElementById('routeCategoryBadge'),
+      aiGeneratedBadge: document.getElementById('aiGeneratedBadge'),
+      routeTitle: document.getElementById('routeTitle'),
+      routeSubtitle: document.getElementById('routeSubtitle'),
+      routeTotalTime: document.getElementById('routeTotalTime'),
+      routeLinesBadges: document.getElementById('routeLinesBadges'),
+      accessibilitySeals: document.getElementById('accessibilitySeals'),
+      timelineStepsContainer: document.getElementById('timelineStepsContainer'),
+      mapsWalkToStationBtn: document.getElementById('mapsWalkToStationBtn'),
+      mapsFullRouteBtn: document.getElementById('mapsFullRouteBtn'),
+      whatsappShareBtn: document.getElementById('whatsappShareBtn'),
+      verdictCard: document.getElementById('verdictCard'),
+      verdictIconBox: document.getElementById('verdictIconBox'),
+      verdictTag: document.getElementById('verdictTag'),
+      uberEstimateBadge: document.getElementById('uberEstimateBadge'),
+      verdictTitle: document.getElementById('verdictTitle'),
+      verdictReason: document.getElementById('verdictReason'),
+      scheduleContextSubtitle: document.getElementById('scheduleContextSubtitle'),
+      bestDepartureWindow: document.getElementById('bestDepartureWindow'),
+      bestReturnWindow: document.getElementById('bestReturnWindow'),
+      metroHoursBar: document.getElementById('metroHoursBar'),
+      uberHoursBar: document.getElementById('uberHoursBar'),
+      hourInspectorBox: document.getElementById('hourInspectorBox'),
+      hourInspectorBadge: document.getElementById('hourInspectorBadge'),
+      hourInspectorText: document.getElementById('hourInspectorText'),
+      destinationScheduleTipText: document.getElementById('destinationScheduleTipText'),
+      toastBanner: document.getElementById('toastBanner'),
+      toastMessage: document.getElementById('toastMessage'),
+    };
+
+    // =========================================================================
+    // 6. SAFE STORAGE, API KEY & HELPER FUNCTIONS
+    // =========================================================================
+    function storageGet(key) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch (_err) {
+        return null;
+      }
+    }
+
+    function storageSet(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+        return true;
+      } catch (_err) {
+        return false;
+      }
+    }
+
+    function storageRemove(key) {
+      try {
+        window.localStorage.removeItem(key);
+        return true;
+      } catch (_err) {
+        return false;
+      }
+    }
+
+    function escapeHTML(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getStoredGeminiApiKey() {
+      return (storageGet(STORAGE_KEYS.GEMINI_API_KEY) || '').trim();
+    }
+
+    function maskApiKey(key) {
+      if (!key) return '';
+      if (key.length <= 10) return '••••••••';
+      return `${key.slice(0, 6)}••••••${key.slice(-4)}`;
+    }
+
+    function captureApiKeyFromUrl() {
+      try {
+        const currentUrl = new URL(window.location.href);
+        if (!currentUrl.searchParams.has('key')) {
+          return false;
+        }
+        const keyFromUrl = (currentUrl.searchParams.get('key') || '').trim();
+        currentUrl.searchParams.delete('key');
+        const cleanSearch = currentUrl.searchParams.toString();
+        const cleanPath = `${currentUrl.pathname}${cleanSearch ? `?${cleanSearch}` : ''}${currentUrl.hash}`;
+        window.history.replaceState({}, document.title, cleanPath);
+
+        if (keyFromUrl) {
+          storageSet(STORAGE_KEYS.GEMINI_API_KEY, keyFromUrl);
+          return true;
+        }
+      } catch (_err) {
+        // Ignore URL parsing errors in non-standard environments
+      }
+      return false;
+    }
+
+    function syncOriginUI() {
+      els.originDisplayText.textContent = state.origin;
+      els.originInput.value = state.origin;
+      els.customOriginTag.classList.toggle('hidden', !state.isCustomOrigin);
+
+      const encodedOrigin = encodeURIComponent(state.origin);
+      if (els.baseStationLinkVilaMariana) {
+        els.baseStationLinkVilaMariana.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Vila Mariana'].mapsQuery)}&travelmode=walking`;
+      }
+      if (els.baseStationLinkChacaraKlabin) {
+        els.baseStationLinkChacaraKlabin.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Chácara Klabin'].mapsQuery)}&travelmode=walking`;
+      }
+      if (els.baseStationLinkAnaRosa) {
+        els.baseStationLinkAnaRosa.href = `https://www.google.com/maps/dir/?api=1&origin=${encodedOrigin}&destination=${encodeURIComponent(BASE_STATIONS['Estação Ana Rosa'].mapsQuery)}&travelmode=walking`;
+      }
+    }
+
+    function saveFamilyPrefs() {
+      storageSet(
+        STORAGE_KEYS.FAMILY_PREFS,
+        JSON.stringify({
+          familyMode: state.familyMode,
+          adults: state.adults,
+          child6: state.child6,
+          child3: state.child3
+        })
+      );
+    }
+
+    function clampInt(val, min, max, fallback) {
+      const n = Number(val);
+      if (!Number.isFinite(n)) return fallback;
+      return Math.max(min, Math.min(max, Math.round(n)));
+    }
+
+    function loadPersistedPreferences() {
+      const savedOrigin = (storageGet(STORAGE_KEYS.CUSTOM_ORIGIN) || '').trim();
+      if (savedOrigin) {
+        state.origin = savedOrigin;
+        state.isCustomOrigin = savedOrigin !== DEFAULT_ORIGIN;
+      }
+      syncOriginUI();
+
+      const rawFamily = storageGet(STORAGE_KEYS.FAMILY_PREFS);
+      if (rawFamily) {
+        try {
+          const parsed = JSON.parse(rawFamily);
+          if (typeof parsed.familyMode === 'boolean') {
+            state.familyMode = parsed.familyMode;
+          }
+          state.adults = clampInt(parsed.adults, 1, 10, 2);
+          state.child6 = clampInt(parsed.child6, 0, 10, 1);
+          state.child3 = clampInt(parsed.child3, 0, 10, 1);
+        } catch (_err) {
+          // Keep defaults if stored JSON is malformed
+        }
+      }
+
+      const rawRecent = storageGet(STORAGE_KEYS.RECENT_SEARCHES);
+      if (rawRecent) {
+        try {
+          const parsedRecent = JSON.parse(rawRecent);
+          if (Array.isArray(parsedRecent)) {
+            state.recentSearches = parsedRecent
+              .filter((item) => item && typeof item.label === 'string' && item.label.trim().length > 0)
+              .slice(0, 5);
+          }
+        } catch (_err) {
+          state.recentSearches = [];
+        }
+      }
+    }
+
+    function recordRecentSearch(entry) {
+      const cleanLabel = (entry.label || '').trim();
+      if (!cleanLabel) return;
+
+      const normalized = cleanLabel.toLowerCase();
+      const filtered = state.recentSearches.filter(
+        (item) => item.label.trim().toLowerCase() !== normalized && (!entry.id || item.id !== entry.id)
+      );
+
+      const nextEntry = {
+        label: cleanLabel,
+        type: entry.type === 'local' ? 'local' : 'custom',
+        id: entry.id || null,
+        query: entry.query || cleanLabel,
+        origin: state.origin,
+        route: entry.route || null
+      };
+
+      state.recentSearches = [nextEntry, ...filtered].slice(0, 5);
+      storageSet(STORAGE_KEYS.RECENT_SEARCHES, JSON.stringify(state.recentSearches));
+      renderRecentSearches();
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      els.toastMessage.textContent = msg;
+      els.toastBanner.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        els.toastBanner.classList.add('hidden');
+      }, 3000);
+    }
+
+    function formatBRL(value) {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function createLineBadgeHTML(lineCode, compact = false) {
+      const style = LINE_STYLES[lineCode] || { label: escapeHTML(lineCode), bg: '#334155', text: '#FFFFFF' };
+      const padding = compact ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs';
+      return `<span class="inline-flex items-center font-bold rounded-md shadow-xs ${padding}" style="background-color: ${style.bg}; color: ${style.text};">${escapeHTML(style.label)}</span>`;
+    }
+
+    function updateLiveClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      els.liveClockText.textContent = `${hh}:${mm}`;
+    }
+
+    function renderAiKeyStatus() {
+      const key = getStoredGeminiApiKey();
+      const hasKey = key.length > 0;
+
+      if (hasKey) {
+        els.aiKeyHeaderDot.className = 'w-2 h-2 rounded-full bg-emerald-500 shrink-0';
+        els.openAiSettingsBtn.className = 'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/90 transition';
+        els.aiModalStatusBox.className = 'p-3 rounded-xl border border-emerald-200 bg-emerald-50/80 text-xs text-emerald-900 flex items-start gap-2.5';
+        els.aiModalStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1 shrink-0';
+        els.aiModalStatusTitle.textContent = 'Chave Gemini ativa neste navegador';
+        els.aiModalStatusDetail.textContent = `Chave salva: ${maskApiKey(key)}. Buscas personalizadas usarão a IA do Google Gemini.`;
+        els.removeAiKeyBtn.disabled = false;
+      } else {
+        els.aiKeyHeaderDot.className = 'w-2 h-2 rounded-full bg-amber-400 shrink-0';
+        els.openAiSettingsBtn.className = 'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200/80 text-slate-700 border border-slate-200/90 transition';
+        els.aiModalStatusBox.className = 'p-3 rounded-xl border border-amber-200 bg-amber-50/80 text-xs text-amber-950 flex items-start gap-2.5';
+        els.aiModalStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0';
+        els.aiModalStatusTitle.textContent = 'Nenhuma chave configurada (modo offline ativo)';
+        els.aiModalStatusDetail.textContent = 'Cole sua chave AIza... do Google AI Studio abaixo para ativar roteiros personalizados por IA.';
+        els.removeAiKeyBtn.disabled = true;
+      }
+    }
+
+    function openAiModal() {
+      renderAiKeyStatus();
+      els.geminiKeyInput.value = getStoredGeminiApiKey();
+      els.geminiKeyInput.type = 'password';
+      els.eyeIconOpen.classList.remove('hidden');
+      els.eyeIconClosed.classList.add('hidden');
+      els.aiSettingsModal.classList.remove('hidden');
+      els.geminiKeyInput.focus();
+    }
+
+    function closeAiModal() {
+      els.aiSettingsModal.classList.add('hidden');
+    }
+
+    function buildWhatsAppShareUrl(route, mapsFullUrl) {
+      const lineNames = (route.linesUsed || [])
+        .map((code) => LINE_STYLES[code]?.label || code)
+        .join(' + ');
+
+      const lines = [
+        `🚇 *Roteiro Metrô & Mobilidade SP*`,
+        `📍 *Destino:* ${route.name}${route.neighborhood ? ` (${route.neighborhood})` : ''}`,
+        `🏠 *Origem:* ${state.origin}`,
+        `🚉 *Embarque:* ${route.boardingStation}`,
+        `🚊 *Linhas:* ${lineNames || 'A definir'}`,
+        `⏱️ *Tempo estimado:* ~${route.totalTimeMinutes} min`
+      ];
+
+      if (route.verdictTitle) {
+        lines.push(`💡 *Dica:* ${route.verdictTitle}`);
+      }
+
+      lines.push('', `🗺️ *Google Maps:* ${mapsFullUrl}`);
+      return `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
+    }
+
+    // =========================================================================
+    // 7. RENDER FUNCTIONS
+    // =========================================================================
+    function renderRecentSearches() {
+      if (!state.recentSearches || state.recentSearches.length === 0) {
+        els.recentSearchesSection.classList.add('hidden');
+        els.recentSearchesContainer.innerHTML = '';
+        return;
+      }
+
+      els.recentSearchesSection.classList.remove('hidden');
+      els.recentSearchesContainer.innerHTML = state.recentSearches
+        .map((item, idx) => {
+          const isCurrent = state.currentRoute?.name?.toLowerCase() === item.label.toLowerCase();
+          const activeClass = isCurrent
+            ? 'bg-blue-50 text-[#0455A1] border-blue-300'
+            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100';
+          return `
+            <button
+              type="button"
+              data-recent-index="${idx}"
+              class="recent-chip inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-semibold transition max-w-full ${activeClass}"
+              title="${escapeHTML(item.label)}"
+            >
+              <svg class="w-3 h-3 shrink-0 opacity-70" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="truncate max-w-[180px]">${escapeHTML(item.label)}</span>
+            </button>
+          `;
+        })
+        .join('');
+
+      document.querySelectorAll('.recent-chip').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.recentIndex);
+          const item = state.recentSearches[idx];
+          if (!item) return;
+
+          els.autocompleteDropdown.classList.add('hidden');
+          els.destinationInput.value = item.label;
+          els.clearSearchBtn.classList.remove('hidden');
+
+          if (item.type === 'local' && item.id) {
+            const found = DESTINATIONS_DB.find((d) => d.id === item.id);
+            if (found) {
+              state.currentRoute = found;
+              state.isAiRoute = false;
+              state.isOfflineFallback = false;
+              recordRecentSearch({ type: 'local', id: found.id, label: found.name });
+              renderAll();
+              return;
+            }
+          }
+
+          if (item.route && item.origin === state.origin) {
+            state.currentRoute = item.route;
+            state.isAiRoute = true;
+            state.isOfflineFallback = Boolean(item.route._isOfflineFallback);
+            recordRecentSearch(item);
+            renderAll();
+            return;
+          }
+
+          planCustomDestinationWithAI(item.query || item.label);
+        });
+      });
+    }
+
+    function renderQuickChips() {
+      els.quickChipsContainer.innerHTML = DESTINATIONS_DB.map((dest) => {
+        const isActive = !state.isAiRoute && state.currentRoute.id === dest.id;
+        const primaryLine = dest.linesUsed[0];
+        const dotColor = LINE_STYLES[primaryLine]?.bg || '#0455A1';
+        const activeClasses = isActive
+          ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+          : 'bg-slate-50 text-slate-700 border-slate-200/90 hover:bg-slate-100';
+        return `
+          <button
+            type="button"
+            data-dest-id="${dest.id}"
+            class="quick-chip shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition ${activeClasses}"
+          >
+            <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${dotColor};"></span>
+            <span>${escapeHTML(dest.chipLabel)}</span>
+          </button>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.quick-chip').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.destId);
+          if (found) {
+            state.currentRoute = found;
+            state.isAiRoute = false;
+            state.isOfflineFallback = false;
+            els.destinationInput.value = found.name;
+            els.clearSearchBtn.classList.remove('hidden');
+            els.autocompleteDropdown.classList.add('hidden');
+            renderAll();
+          }
+        });
+      });
+    }
+
+    function renderDayToggle() {
+      const isWeekday = state.dayType === 'weekday';
+      els.btnWeekday.className = isWeekday
+        ? 'py-2.5 px-3 rounded-lg text-xs font-bold transition text-center bg-white text-slate-900 shadow-xs'
+        : 'py-2.5 px-3 rounded-lg text-xs font-semibold transition text-center text-slate-600 hover:text-slate-900';
+      els.btnWeekend.className = !isWeekday
+        ? 'py-2.5 px-3 rounded-lg text-xs font-bold transition text-center bg-white text-slate-900 shadow-xs'
+        : 'py-2.5 px-3 rounded-lg text-xs font-semibold transition text-center text-slate-600 hover:text-slate-900';
+
+      const matchesToday = (isWeekday && !isTodayWeekend) || (!isWeekday && isTodayWeekend);
+      els.autoDayBadge.classList.toggle('hidden', !matchesToday);
+    }
+
+    function renderFamilyControls() {
+      const FARE_2026 = 5.40;
+      if (state.familyMode) {
+        els.familyModeToggle.classList.remove('bg-slate-300');
+        els.familyModeToggle.classList.add('bg-[#007E5E]');
+        els.familyModeToggle.setAttribute('aria-checked', 'true');
+        els.familyModeKnob.classList.remove('translate-x-0');
+        els.familyModeKnob.classList.add('translate-x-5');
+        els.familyDetailsPanel.classList.remove('hidden');
+        els.singleFareSummary.classList.add('hidden');
+
+        els.countAdults.textContent = state.adults;
+        els.countChild6.textContent = state.child6;
+        els.countChild3.textContent = state.child3;
+
+        const payingPassengers = state.adults + state.child6;
+        const oneWay = payingPassengers * FARE_2026;
+        const roundTrip = oneWay * 2;
+
+        const exemptText = state.child3 > 0
+          ? ` + ${state.child3} ${state.child3 === 1 ? 'isenta' : 'isentas'}`
+          : '';
+        els.payingCountText.textContent = `${payingPassengers} ${payingPassengers === 1 ? 'pagante' : 'pagantes'}${exemptText}`;
+        els.fareOneWayText.textContent = formatBRL(oneWay);
+        els.fareRoundTripText.textContent = formatBRL(roundTrip);
+      } else {
+        els.familyModeToggle.classList.remove('bg-[#007E5E]');
+        els.familyModeToggle.classList.add('bg-slate-300');
+        els.familyModeToggle.setAttribute('aria-checked', 'false');
+        els.familyModeKnob.classList.remove('translate-x-5');
+        els.familyModeKnob.classList.add('translate-x-0');
+        els.familyDetailsPanel.classList.add('hidden');
+        els.singleFareSummary.classList.remove('hidden');
+      }
+    }
+
+    function renderRouteCard() {
+      const route = state.currentRoute;
+      els.routeCategoryBadge.textContent = route.category || 'Destino SP';
+      els.aiGeneratedBadge.classList.toggle('hidden', !state.isAiRoute);
+      if (state.isAiRoute) {
+        if (state.isOfflineFallback) {
+          els.aiGeneratedBadge.textContent = 'Roteiro Base (Offline)';
+          els.aiGeneratedBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-200 border border-amber-400/30';
+        } else {
+          els.aiGeneratedBadge.textContent = 'Rota IA Personalizada';
+          els.aiGeneratedBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
+        }
+      }
+      els.routeTitle.textContent = route.name;
+      els.routeSubtitle.textContent = `${route.neighborhood || 'São Paulo'} • Embarque via ${route.boardingStation}`;
+      els.routeTotalTime.textContent = `~${route.totalTimeMinutes} min`;
+
+      // Line badges
+      els.routeLinesBadges.innerHTML = (route.linesUsed || [])
+        .map((line) => createLineBadgeHTML(line, true))
+        .join('');
+
+      // Accessibility & Platform Door Seals
+      const seals = [];
+      if (route.hasPlatformDoors) {
+        seals.push(`
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Portas de Plataforma
+          </span>
+        `);
+      }
+      if (route.hasElevators) {
+        seals.push(`
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-500/20 text-sky-200 border border-sky-400/30">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 10l5-5 5 5M7 14l5 5 5-5"/></svg>
+            Elevadores
+          </span>
+        `);
+      }
+      els.accessibilitySeals.innerHTML = seals.join('');
+
+      // Step-by-Step Timeline
+      els.timelineStepsContainer.innerHTML = (route.steps || []).map((step, idx) => {
+        const isLast = idx === route.steps.length - 1;
+        const lineStyle = step.lineCode ? LINE_STYLES[step.lineCode] : null;
+        const nodeColor = lineStyle
+          ? lineStyle.bg
+          : step.type === 'uber'
+            ? '#0F172A'
+            : '#64748B';
+
+        let iconSvg = '';
+        if (step.type === 'walk') {
+          iconSvg = `<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 4a2 2 0 100 4 2 2 0 000-4zm-2 7l-2 9m2-9l3 3 2 6m-5-9l-3 2v3"/></svg>`;
+        } else if (step.type === 'uber') {
+          iconSvg = `<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l1.5-4.5A2 2 0 018.4 7h7.2a2 2 0 011.9 1.5L19 13m-14 0h14v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H8v1a1 1 0 01-1 1H6a1 1 0 01-1-1v-4z"/></svg>`;
+        } else {
+          iconSvg = `<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="2.5"/><path d="M6 10h12M9 14h.01M15 14h.01M8 17l-1.5 3M16 17l1.5 3" stroke-linecap="round"/></svg>`;
+        }
+
+        const stepLinePill = lineStyle
+          ? `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold mb-1" style="background-color: ${lineStyle.bg}; color: ${lineStyle.text};">${escapeHTML(lineStyle.label)}</span>`
+          : '';
+
+        return `
+          <div class="relative flex gap-3.5 ${isLast ? '' : 'pb-5'}">
+            ${!isLast ? `<div class="absolute left-4 top-8 bottom-0 w-0.5" style="background-color: ${nodeColor}40;"></div>` : ''}
+            <div class="relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-xs" style="background-color: ${nodeColor};">
+              ${iconSvg}
+            </div>
+            <div class="flex-1 min-w-0 pt-0.5">
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
+                  ${stepLinePill}
+                  <h4 class="text-sm font-bold text-slate-900 leading-snug">${escapeHTML(step.title)}</h4>
+                </div>
+                <span class="shrink-0 text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md tabular-nums">
+                  ~${escapeHTML(step.durationMinutes)} min
+                </span>
+              </div>
+              <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">${escapeHTML(step.subtitle)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Google Maps & WhatsApp Action Links
+      const originEncoded = encodeURIComponent(state.origin);
+      const baseStationInfo = BASE_STATIONS[route.boardingStation];
+      const stationQuery = encodeURIComponent(baseStationInfo ? baseStationInfo.mapsQuery : `${route.boardingStation} Metrô São Paulo`);
+      const destQuery = encodeURIComponent(route.mapsDestinationQuery || `${route.name} São Paulo`);
+      const mapsFullUrl = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${destQuery}&travelmode=transit`;
+
+      els.mapsWalkToStationBtn.href = `https://www.google.com/maps/dir/?api=1&origin=${originEncoded}&destination=${stationQuery}&travelmode=walking`;
+      els.mapsFullRouteBtn.href = mapsFullUrl;
+      els.whatsappShareBtn.href = buildWhatsAppShareUrl(route, mapsFullUrl);
+
+      // Render Verdict Card
+      renderVerdictCard(route);
+    }
+
+    function renderVerdictCard(route) {
+      const winner = route.verdictWinner || 'metro';
+      els.uberEstimateBadge.textContent = `Uber direto: ${route.uberDirectEstimateBRL || 'R$ 25–35'} (~${route.uberDirectMinutes || 20} min)`;
+      els.verdictTitle.textContent = route.verdictTitle;
+      els.verdictReason.textContent = route.verdictReason;
+
+      if (winner === 'metro') {
+        els.verdictCard.className = 'rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 sm:p-5 shadow-sm';
+        els.verdictIconBox.className = 'w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5';
+        els.verdictTag.className = 'text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-200/80 text-emerald-900';
+        els.verdictTag.textContent = 'Veredito: Metrô Vence';
+        els.verdictIconBox.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+      } else if (winner === 'uber') {
+        els.verdictCard.className = 'rounded-2xl border border-amber-200 bg-amber-50/80 p-4 sm:p-5 shadow-sm';
+        els.verdictIconBox.className = 'w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 mt-0.5';
+        els.verdictTag.className = 'text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-200/90 text-amber-950';
+        els.verdictTag.textContent = state.familyMode ? 'Veredito Família: Uber Direto' : 'Veredito: Uber Mais Prático';
+        els.verdictIconBox.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l1.5-4.5A2 2 0 018.4 7h7.2a2 2 0 011.9 1.5L19 13m-14 0h14v4a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H8v1a1 1 0 01-1 1H6a1 1 0 01-1-1v-4z"/></svg>`;
+      } else {
+        els.verdictCard.className = 'rounded-2xl border border-blue-200 bg-blue-50/70 p-4 sm:p-5 shadow-sm';
+        els.verdictIconBox.className = 'w-10 h-10 rounded-xl bg-[#0455A1] text-white flex items-center justify-center shrink-0 mt-0.5';
+        els.verdictTag.className = 'text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-200/80 text-blue-950';
+        els.verdictTag.textContent = 'Veredito: Integração Metrô + Uber Curto';
+        els.verdictIconBox.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`;
+      }
+    }
+
+    function renderScheduleBars() {
+      const profile = SCHEDULE_PROFILES[state.dayType];
+      const currentHour = new Date().getHours();
+
+      els.scheduleContextSubtitle.textContent = `Faixas das 05h às 00h • ${profile.label}`;
+      els.bestDepartureWindow.textContent = profile.bestDeparture;
+      els.bestReturnWindow.textContent = profile.bestReturn;
+
+      const colorMap = {
+        green: 'bg-emerald-500 hover:bg-emerald-600',
+        yellow: 'bg-amber-400 hover:bg-amber-500',
+        red: 'bg-rose-500 hover:bg-rose-600',
+      };
+
+      const renderBarCells = (barType, targetEl) => {
+        targetEl.innerHTML = HOURS_LIST.map((h) => {
+          const slot = profile[barType][h];
+          const hourLabel = `${String(h).padStart(2, '0')}h`;
+          const isNow = h === currentHour;
+          const isSelected = state.selectedHour === h && state.selectedBarType === barType;
+          const ringClass = isSelected
+            ? 'ring-2 ring-slate-900 scale-y-110 z-10'
+            : isNow
+              ? 'ring-2 ring-blue-600'
+              : '';
+
+          return `
+            <button
+              type="button"
+              data-hour="${h}"
+              data-bar="${barType}"
+              title="${hourLabel}: ${escapeHTML(slot.note)}"
+              class="hour-slot-btn h-7 rounded-md transition-all cursor-pointer relative ${colorMap[slot.level]} ${ringClass}"
+              aria-label="${hourLabel} ${barType}"
+            >
+              ${isNow ? '<span class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-600"></span>' : ''}
+            </button>
+          `;
+        }).join('');
+      };
+
+      renderBarCells('metro', els.metroHoursBar);
+      renderBarCells('uber', els.uberHoursBar);
+
+      // Update Inspector Box
+      const activeSlot = profile[state.selectedBarType][state.selectedHour] || profile.metro[10];
+      const badgeStyles = {
+        green: 'bg-emerald-100 text-emerald-800',
+        yellow: 'bg-amber-100 text-amber-800',
+        red: 'bg-rose-100 text-rose-800',
+      };
+      els.hourInspectorBadge.className = `px-2 py-0.5 rounded font-bold text-[11px] shrink-0 tabular-nums ${badgeStyles[activeSlot.level]}`;
+      els.hourInspectorBadge.textContent = `${String(state.selectedHour).padStart(2, '0')}h`;
+      els.hourInspectorText.textContent = activeSlot.note;
+
+      // Destination specific schedule note
+      const route = state.currentRoute;
+      const depTip = escapeHTML(route.customDepartureTip || '');
+      const retTip = escapeHTML(route.customReturnTip || '');
+      els.destinationScheduleTipText.innerHTML = `<strong>Dica para ${escapeHTML(route.name)}:</strong> ${depTip} ${retTip}`;
+
+      // Attach listeners to hour cells
+      document.querySelectorAll('.hour-slot-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.selectedHour = Number(btn.dataset.hour);
+          state.selectedBarType = btn.dataset.bar;
+          renderScheduleBars();
+        });
+      });
+    }
+
+    function renderAll() {
+      renderAiKeyStatus();
+      renderRecentSearches();
+      renderQuickChips();
+      renderDayToggle();
+      renderFamilyControls();
+      renderRouteCard();
+      renderScheduleBars();
+    }
+
+    // =========================================================================
+    // 8. GEMINI API INTEGRATION FOR CUSTOM DESTINATIONS (STRUCTURED JSON)
+    // =========================================================================
+    async function fetchWithExponentialBackoff(url, options, maxRetries = 2) {
+      let delay = 1000;
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            const err = new Error(`HTTP ${response.status}`);
+            err.status = response.status;
+            throw err;
+          }
+          return await response.json();
+        } catch (err) {
+          const nonRetryableStatuses = [400, 401, 403, 404];
+          if (nonRetryableStatuses.includes(err.status) || attempt === maxRetries) {
+            throw err;
+          }
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          delay *= 2;
+        }
+      }
+    }
+
+    function buildOfflineFallbackRoute(queryText) {
+      return {
+        name: queryText,
+        neighborhood: 'São Paulo - SP',
+        category: 'Destino Personalizado',
+        totalTimeMinutes: 35,
+        boardingStation: 'Estação Ana Rosa',
+        linesUsed: ['L1-Azul', 'L2-Verde'],
+        hasPlatformDoors: true,
+        hasElevators: true,
+        steps: [
+          {
+            type: 'walk',
+            title: 'Caminhada até Estação Ana Rosa (Integração L1/L2)',
+            subtitle: '900m (~13 min a pé via R. Dr. Neto de Araújo e R. Vergueiro)',
+            durationMinutes: 13
+          },
+          {
+            type: 'metro',
+            lineCode: 'L1-Azul',
+            title: 'Embarque na Linha 1-Azul ou Linha 2-Verde',
+            subtitle: `Siga no eixo Norte-Sul (L1) ou Paulista/Vila Madalena (L2) em direção a ${queryText}`,
+            durationMinutes: 14
+          },
+          {
+            type: 'uber',
+            title: `Trecho final até ${queryText}`,
+            subtitle: 'Verifique a estação mais próxima no botão Google Maps abaixo ou finalize com Uber curto',
+            durationMinutes: 8
+          }
+        ],
+        verdictWinner: 'hybrid',
+        verdictTitle: 'Integração Metrô + Uber curto no destino final',
+        verdictReason: `Saindo da Vila Mariana pelas Linhas 1-Azul ou 2-Verde você vence os principais gargalos de trânsito de SP e pode finalizar os últimos quilômetros até "${queryText}" com um Uber curto.`,
+        uberDirectEstimateBRL: 'R$ 25–38',
+        uberDirectMinutes: 25,
+        customDepartureTip: 'Prefira sair entre 09h30 e 11h30 ou 14h00 e 16h00 para viajar com tranquilidade.',
+        customReturnTip: 'Evite retornar entre 17h00 e 19h30 em dias úteis.',
+        mapsDestinationQuery: `${queryText} São Paulo SP`,
+        _isOfflineFallback: true
+      };
+    }
+
+    async function planCustomDestinationWithAI(queryText) {
+      const apiKey = getStoredGeminiApiKey();
+
+      // Offline fallback immediately when no API key is configured
+      if (!apiKey) {
+        const fallbackRoute = buildOfflineFallbackRoute(queryText);
+        state.currentRoute = fallbackRoute;
+        state.isAiRoute = true;
+        state.isOfflineFallback = true;
+        recordRecentSearch({ type: 'custom', label: fallbackRoute.name, query: queryText, route: fallbackRoute });
+        renderAll();
+        showToast('Modo offline: configure sua chave IA no topo para rotas por IA');
+        return;
+      }
+
+      els.aiLoadingCard.classList.remove('hidden');
+      els.routeResultCard.classList.add('opacity-50', 'pointer-events-none');
+
+      const systemPrompt = `Você é um especialista em mobilidade urbana, Metrô/CPTM de São Paulo e logística familiar.
+A origem do usuário é: "${state.origin}".
+As 3 estações de Metrô próximas à Vila Mariana (R. Dr. Neto de Araújo, 265) são:
+1) "Estação Vila Mariana" (Linha 1-Azul): 600m (~9 min a pé via R. Dr. Neto de Araújo e Av. Lins de Vasconcelos).
+2) "Estação Chácara Klabin" (Linhas 2-Verde e 5-Lilás): 900m (~11 min a pé via R. Vergueiro).
+3) "Estação Ana Rosa" (Integração Linhas 1-Azul e 2-Verde): 900m (~13 min a pé via R. Dr. Neto de Araújo e R. Vergueiro).
+
+Use apenas estes códigos oficiais de linha em linesUsed e lineCode:
+"L1-Azul", "L2-Verde", "L3-Vermelha", "L4-Amarela", "L5-Lilás", "L9-Esmeralda", "L13-Jade", "L15-Prata".
+
+Calcule a rota mais inteligente e segura considerando que o usuário pode estar com crianças de 6 e 3 anos (tarifa Metrô SP 2026 = R$ 5,40; até 5 anos isento; 6+ paga inteira).
+Seja geograficamente preciso sobre São Paulo, estações de desembarque, distância final e quando vale mais ir de Uber direto vs. Metrô vs. Metrô + Uber curto. Responda em Português do Brasil.`;
+
+      const userQuery = `Planeje o trajeto detalhado saindo de "${state.origin}" até o destino em São Paulo: "${queryText}".`;
+
+      const payload = {
+        contents: [{ role: 'user', parts: [{ text: userQuery }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              name: { type: 'STRING' },
+              neighborhood: { type: 'STRING' },
+              category: { type: 'STRING' },
+              totalTimeMinutes: { type: 'INTEGER' },
+              boardingStation: {
+                type: 'STRING',
+                enum: ['Estação Vila Mariana', 'Estação Chácara Klabin', 'Estação Ana Rosa']
+              },
+              linesUsed: {
+                type: 'ARRAY',
+                items: { type: 'STRING' }
+              },
+              hasPlatformDoors: { type: 'BOOLEAN' },
+              hasElevators: { type: 'BOOLEAN' },
+              steps: {
+                type: 'ARRAY',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    type: { type: 'STRING', enum: ['walk', 'metro', 'transfer', 'uber'] },
+                    lineCode: { type: 'STRING' },
+                    title: { type: 'STRING' },
+                    subtitle: { type: 'STRING' },
+                    durationMinutes: { type: 'INTEGER' }
+                  },
+                  required: ['type', 'title', 'subtitle', 'durationMinutes']
+                }
+              },
+              verdictWinner: { type: 'STRING', enum: ['metro', 'uber', 'hybrid'] },
+              verdictTitle: { type: 'STRING' },
+              verdictReason: { type: 'STRING' },
+              uberDirectEstimateBRL: { type: 'STRING' },
+              uberDirectMinutes: { type: 'INTEGER' },
+              customDepartureTip: { type: 'STRING' },
+              customReturnTip: { type: 'STRING' },
+              mapsDestinationQuery: { type: 'STRING' }
+            },
+            required: [
+              'name', 'neighborhood', 'category', 'totalTimeMinutes', 'boardingStation',
+              'linesUsed', 'hasPlatformDoors', 'hasElevators', 'steps',
+              'verdictWinner', 'verdictTitle', 'verdictReason',
+              'uberDirectEstimateBRL', 'uberDirectMinutes',
+              'customDepartureTip', 'customReturnTip', 'mapsDestinationQuery'
+            ]
+          }
+        }
+      };
+
+      const candidateModels = ['gemini-3-flash-preview', 'gemini-2.5-flash'];
+
+      try {
+        let result = null;
+        let lastErr = null;
+
+        for (const model of candidateModels) {
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          try {
+            result = await fetchWithExponentialBackoff(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            break;
+          } catch (err) {
+            lastErr = err;
+            if (err.status !== 404) {
+              throw err;
+            }
+          }
+        }
+
+        if (!result) throw lastErr || new Error('Modelo Gemini indisponível');
+
+        const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!rawText) throw new Error('Resposta vazia da IA');
+
+        const parsedRoute = JSON.parse(rawText);
+        // Normalize linesUsed to valid LINE_STYLES keys
+        parsedRoute.linesUsed = (parsedRoute.linesUsed || ['L1-Azul']).filter((l) => LINE_STYLES[l]);
+        if (parsedRoute.linesUsed.length === 0) parsedRoute.linesUsed = ['L1-Azul'];
+        parsedRoute._isOfflineFallback = false;
+
+        state.currentRoute = parsedRoute;
+        state.isAiRoute = true;
+        state.isOfflineFallback = false;
+        recordRecentSearch({ type: 'custom', label: parsedRoute.name || queryText, query: queryText, route: parsedRoute });
+        renderAll();
+        showToast(`Rota calculada para ${parsedRoute.name}`);
+      } catch (err) {
+        const fallbackRoute = buildOfflineFallbackRoute(queryText);
+        state.currentRoute = fallbackRoute;
+        state.isAiRoute = true;
+        state.isOfflineFallback = true;
+        recordRecentSearch({ type: 'custom', label: fallbackRoute.name, query: queryText, route: fallbackRoute });
+        renderAll();
+
+        if (err && (err.status === 400 || err.status === 401 || err.status === 403)) {
+          showToast('Chave Gemini inválida ou sem permissão — roteiro offline exibido');
+        } else {
+          showToast('Roteiro base gerado — confira no Google Maps');
+        }
+      } finally {
+        els.aiLoadingCard.classList.add('hidden');
+        els.routeResultCard.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    // =========================================================================
+    // 9. AUTOCOMPLETE & SEARCH HANDLERS
+    // =========================================================================
+    function updateAutocompleteDropdown(query) {
+      const trimmed = query.trim().toLowerCase();
+      els.clearSearchBtn.classList.toggle('hidden', trimmed.length === 0);
+
+      if (!trimmed) {
+        els.autocompleteDropdown.classList.add('hidden');
+        return;
+      }
+
+      const matches = DESTINATIONS_DB.filter(
+        (d) =>
+          d.name.toLowerCase().includes(trimmed) ||
+          d.neighborhood.toLowerCase().includes(trimmed) ||
+          d.category.toLowerCase().includes(trimmed)
+      );
+
+      let itemsHTML = matches
+        .slice(0, 6)
+        .map((m) => {
+          const linePills = m.linesUsed.map((l) => createLineBadgeHTML(l, true)).join(' ');
+          return `
+            <button
+              type="button"
+              data-match-id="${m.id}"
+              class="ac-local-item w-full text-left px-4 py-3 hover:bg-slate-50 flex items-center justify-between gap-2 transition"
+            >
+              <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">${escapeHTML(m.name)}</p>
+                <p class="text-[11px] text-slate-500 truncate">${escapeHTML(m.neighborhood)} • ~${m.totalTimeMinutes} min</p>
+              </div>
+              <div class="shrink-0 flex items-center gap-1">${linePills}</div>
+            </button>
+          `;
+        })
+        .join('');
+
+      // Always offer AI routing option for exact custom text
+      itemsHTML += `
+        <button
+          type="button"
+          id="acAiSearchBtn"
+          class="w-full text-left px-4 py-3 bg-blue-50/60 hover:bg-blue-50 flex items-center gap-2.5 transition"
+        >
+          <span class="w-7 h-7 rounded-lg bg-[#0455A1] text-white flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </span>
+          <div class="min-w-0">
+            <p class="text-xs font-bold text-[#0455A1] truncate">Calcular rota IA para "${escapeHTML(query.trim())}"</p>
+            <p class="text-[11px] text-slate-500">Busca estação ideal, linhas, baldeações e horário</p>
+          </div>
+        </button>
+      `;
+
+      els.autocompleteDropdown.innerHTML = itemsHTML;
+      els.autocompleteDropdown.classList.remove('hidden');
+
+      document.querySelectorAll('.ac-local-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const found = DESTINATIONS_DB.find((d) => d.id === btn.dataset.matchId);
+          if (found) {
+            state.currentRoute = found;
+            state.isAiRoute = false;
+            state.isOfflineFallback = false;
+            els.destinationInput.value = found.name;
+            els.autocompleteDropdown.classList.add('hidden');
+            recordRecentSearch({ type: 'local', id: found.id, label: found.name });
+            renderAll();
+          }
+        });
+      });
+
+      const aiBtn = document.getElementById('acAiSearchBtn');
+      if (aiBtn) {
+        aiBtn.addEventListener('click', () => {
+          els.autocompleteDropdown.classList.add('hidden');
+          planCustomDestinationWithAI(query.trim());
+        });
+      }
+    }
+
+    function executeSearchSubmission() {
+      const raw = els.destinationInput.value.trim();
+      els.autocompleteDropdown.classList.add('hidden');
+
+      if (!raw) {
+        showToast('Digite um destino ou toque em um atalho rápido');
+        els.destinationInput.focus();
+        return;
+      }
+
+      const lower = raw.toLowerCase();
+      const exactMatch = DESTINATIONS_DB.find(
+        (d) => d.name.toLowerCase() === lower || d.chipLabel.toLowerCase() === lower
+      );
+
+      if (exactMatch) {
+        state.currentRoute = exactMatch;
+        state.isAiRoute = false;
+        state.isOfflineFallback = false;
+        recordRecentSearch({ type: 'local', id: exactMatch.id, label: exactMatch.name });
+        renderAll();
+        return;
+      }
+
+      planCustomDestinationWithAI(raw);
+    }
+
+    // =========================================================================
+    // 10. EVENT LISTENERS & INITIALIZATION
+    // =========================================================================
+    function bindEvents() {
+      // AI Settings Modal
+      els.openAiSettingsBtn.addEventListener('click', openAiModal);
+      els.closeAiModalBtn.addEventListener('click', closeAiModal);
+
+      els.aiSettingsModal.addEventListener('click', (e) => {
+        if (e.target === els.aiSettingsModal) {
+          closeAiModal();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !els.aiSettingsModal.classList.contains('hidden')) {
+          closeAiModal();
+        }
+      });
+
+      els.toggleKeyVisibilityBtn.addEventListener('click', () => {
+        const isPassword = els.geminiKeyInput.type === 'password';
+        els.geminiKeyInput.type = isPassword ? 'text' : 'password';
+        els.eyeIconOpen.classList.toggle('hidden', isPassword);
+        els.eyeIconClosed.classList.toggle('hidden', !isPassword);
+      });
+
+      els.saveAiKeyBtn.addEventListener('click', () => {
+        const val = els.geminiKeyInput.value.trim();
+        if (!val) {
+          showToast('Cole uma chave válida do Google AI Studio');
+          els.geminiKeyInput.focus();
+          return;
+        }
+        storageSet(STORAGE_KEYS.GEMINI_API_KEY, val);
+        renderAiKeyStatus();
+        closeAiModal();
+        showToast(
+          val.startsWith('AIza')
+            ? 'Chave Gemini salva no navegador'
+            : 'Chave salva! Dica: chaves AI Studio costumam iniciar com AIza'
+        );
+      });
+
+      els.removeAiKeyBtn.addEventListener('click', () => {
+        storageRemove(STORAGE_KEYS.GEMINI_API_KEY);
+        els.geminiKeyInput.value = '';
+        renderAiKeyStatus();
+        showToast('Chave Gemini removida do navegador');
+      });
+
+      // Origin editing
+      els.toggleEditOriginBtn.addEventListener('click', () => {
+        els.originEditorBox.classList.toggle('hidden');
+        if (!els.originEditorBox.classList.contains('hidden')) {
+          els.originInput.focus();
+        }
+      });
+
+      els.saveOriginBtn.addEventListener('click', () => {
+        const val = els.originInput.value.trim();
+        if (!val) {
+          showToast('Informe um endereço de origem válido');
+          return;
+        }
+        state.origin = val;
+        state.isCustomOrigin = val !== DEFAULT_ORIGIN;
+        if (state.isCustomOrigin) {
+          storageSet(STORAGE_KEYS.CUSTOM_ORIGIN, val);
+        } else {
+          storageRemove(STORAGE_KEYS.CUSTOM_ORIGIN);
+        }
+        syncOriginUI();
+        els.originEditorBox.classList.add('hidden');
+        renderRouteCard();
+        showToast('Ponto de origem salvo');
+      });
+
+      els.resetOriginBtn.addEventListener('click', () => {
+        state.origin = DEFAULT_ORIGIN;
+        state.isCustomOrigin = false;
+        storageRemove(STORAGE_KEYS.CUSTOM_ORIGIN);
+        syncOriginUI();
+        els.originEditorBox.classList.add('hidden');
+        renderRouteCard();
+        showToast('Origem restaurada para DNA Vila Mariana');
+      });
+
+      // Base stations accordion
+      els.toggleBaseStationsBtn.addEventListener('click', () => {
+        const isHidden = els.baseStationsList.classList.toggle('hidden');
+        els.baseStationsChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+
+      // Destination search & autocomplete
+      els.destinationInput.addEventListener('input', (e) => {
+        updateAutocompleteDropdown(e.target.value);
+      });
+
+      els.destinationInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSearchSubmission();
+        }
+      });
+
+      els.clearSearchBtn.addEventListener('click', () => {
+        els.destinationInput.value = '';
+        els.clearSearchBtn.classList.add('hidden');
+        els.autocompleteDropdown.classList.add('hidden');
+        els.destinationInput.focus();
+      });
+
+      els.planRouteBtn.addEventListener('click', executeSearchSubmission);
+
+      els.clearRecentBtn.addEventListener('click', () => {
+        state.recentSearches = [];
+        storageRemove(STORAGE_KEYS.RECENT_SEARCHES);
+        renderRecentSearches();
+        showToast('Histórico de buscas limpo');
+      });
+
+      // Close autocomplete on outside click
+      document.addEventListener('click', (e) => {
+        if (!els.destinationInput.contains(e.target) && !els.autocompleteDropdown.contains(e.target)) {
+          els.autocompleteDropdown.classList.add('hidden');
+        }
+      });
+
+      // Day type toggle
+      els.btnWeekday.addEventListener('click', () => {
+        state.dayType = 'weekday';
+        renderDayToggle();
+        renderScheduleBars();
+      });
+
+      els.btnWeekend.addEventListener('click', () => {
+        state.dayType = 'weekend';
+        renderDayToggle();
+        renderScheduleBars();
+      });
+
+      // Family mode switch
+      els.familyModeToggle.addEventListener('click', () => {
+        state.familyMode = !state.familyMode;
+        saveFamilyPrefs();
+        renderFamilyControls();
+        renderVerdictCard(state.currentRoute);
+      });
+
+      // Passenger steppers
+      document.querySelectorAll('.stepper-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const role = btn.dataset.role;
+          const delta = Number(btn.dataset.delta);
+          const minVal = role === 'adults' ? 1 : 0;
+          const nextVal = Math.max(minVal, Math.min(10, state[role] + delta));
+          state[role] = nextVal;
+          saveFamilyPrefs();
+          renderFamilyControls();
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const capturedKeyFromUrl = captureApiKeyFromUrl();
+      loadPersistedPreferences();
+      updateLiveClock();
+      setInterval(updateLiveClock, 15000);
+      bindEvents();
+      renderAll();
+      if (capturedKeyFromUrl) {
+        showToast('Chave Gemini salva e removida da URL com segurança');
+      }
+    });
+  </script>
+</body>
+</html>
